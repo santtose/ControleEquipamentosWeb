@@ -1,0 +1,14 @@
+﻿Evolução
+- Criar DAOs
+- Criar Controllers
+- Scaffolding das Views
+
+Melhoria
+- Colocar Data Annotations
+- Corrigir as Views conforme necessidade
+
+Regras de Negócio
+- Ver documentação original e aplicar as regras conforme projeto anteior
+
+Atender as necessidades do professor
+- Encontrar uma API para consumir que seja útil
