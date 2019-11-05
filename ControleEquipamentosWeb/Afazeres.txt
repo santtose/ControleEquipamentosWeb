@@ -1,7 +1,7 @@
 ﻿Evolução
 - Criar DAOs
-- Criar Controllers
-- Scaffolding das Views
+- Criar Controllers (via scaffold)
+- Remover o acesso a dados dos controllers
 
 Melhoria
 - Colocar Data Annotations
