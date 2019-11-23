@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ControleEquipamentosWeb.DAL;
 using ControleEquipamentosWeb.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,9 @@ namespace ControleEquipamentosWeb
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //Configuração da injeção de dependência
+            services.AddScoped<PessoaDAO>();
+
             services.AddDbContext<Context>(options => options.UseSqlServer
             (Configuration.GetConnectionString("ControleEquipamentosConnection")));
 
@@ -59,6 +63,7 @@ namespace ControleEquipamentosWeb
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

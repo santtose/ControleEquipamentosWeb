@@ -6,40 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControleEquipamentosWeb.Models;
+using ControleEquipamentosWeb.DAL;
 
 namespace ControleEquipamentosWeb.Controllers
 {
     public class PessoasController : Controller
     {
-        private readonly Context _context;
+        private readonly PessoaDAO _pessoaDAO;
 
-        public PessoasController(Context context)
+        public PessoasController(PessoaDAO pessoaDAO)
         {
-            _context = context;
+            _pessoaDAO = pessoaDAO;
         }
 
         // GET: Pessoas
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Pessoas.ToListAsync());
+            return View(_pessoaDAO.ListarTodos());
         }
 
         // GET: Pessoas/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var pessoa = await _context.Pessoas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoa == null)
-            {
-                return NotFound();
-            }
-
-            return View(pessoa);
+            var obj = _pessoaDAO.BuscarPorId(id.Value);
+            return View(obj);
         }
 
         // GET: Pessoas/Create
@@ -53,31 +43,25 @@ namespace ControleEquipamentosWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Aniversario,Usuario,CPF,Admin,CriadoEm")] Pessoa pessoa)
+        public IActionResult Create(Pessoa p)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pessoa);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_pessoaDAO.Cadastrar(p))
+                {
+                    return RedirectToAction("Index");
+                }
+                ModelState.AddModelError
+                    ("", "Pessoa já existe!");
+                return View(p);
             }
-            return View(pessoa);
+            return View(p);
         }
 
         // GET: Pessoas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var pessoa = await _context.Pessoas.FindAsync(id);
-            if (pessoa == null)
-            {
-                return NotFound();
-            }
-            return View(pessoa);
+            return View(_pessoaDAO.BuscarPorId(id));
         }
 
         // POST: Pessoas/Edit/5
@@ -85,68 +69,34 @@ namespace ControleEquipamentosWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Aniversario,Usuario,CPF,Admin,CriadoEm")] Pessoa pessoa)
+        public IActionResult Edit(Pessoa p)
         {
-            if (id != pessoa.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(pessoa);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PessoaExists(pessoa.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(pessoa);
+            _pessoaDAO.Alterar(p);
+            return RedirectToAction("Index");
         }
 
         // GET: Pessoas/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var pessoa = await _context.Pessoas
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoa == null)
+            var obj = _pessoaDAO.BuscarPorId(id.Value);
+            if (id == null)
             {
                 return NotFound();
             }
-
-            return View(pessoa);
+            return View(obj);
         }
 
         // POST: Pessoas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var pessoa = await _context.Pessoas.FindAsync(id);
-            _context.Pessoas.Remove(pessoa);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool PessoaExists(int id)
-        {
-            return _context.Pessoas.Any(e => e.Id == id);
+            _pessoaDAO.Remover(id);
+            return RedirectToAction("Index");
         }
     }
 }

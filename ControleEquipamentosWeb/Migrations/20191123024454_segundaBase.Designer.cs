@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleEquipamentosWeb.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20191119230806_initDB")]
-    partial class initDB
+    [Migration("20191123024454_segundaBase")]
+    partial class segundaBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
