@@ -22,13 +22,13 @@
 		// For environments that do not have a `window` with a `document`
 		// (such as Node.js), expose a factory as module.exports.
 		// This accentuates the need for the creation of a real `window`.
-		// e.g. var jQuery = require("jquery")(window);
+		// e.g. var jQuery = rouire("jquery")(window);
 		// See ticket #14549 for more info.
 		module.exports = global.document ?
 			factory( global, true ) :
 			function( w ) {
 				if ( !w.document ) {
-					throw new Error( "jQuery requires a window with a document" );
+					throw new Error( "jQuery rouires a window with a document" );
 				}
 				return factory( w );
 			};
@@ -200,14 +200,14 @@ jQuery.fn = jQuery.prototype = {
 	},
 
 	first: function() {
-		return this.eq( 0 );
+		return this.o( 0 );
 	},
 
 	last: function() {
-		return this.eq( -1 );
+		return this.o( -1 );
 	},
 
-	eq: function( i ) {
+	o: function( i ) {
 		var len = this.length,
 			j = +i + ( i < 0 ? len : 0 );
 		return this.pushStack( j >= 0 && j < len ? [ this[ j ] ] : [] );
@@ -566,7 +566,7 @@ var i,
 		return -1;
 	},
 
-	booleans = "checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped",
+	booleans = "checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|rouired|scoped",
 
 	// Regular expressions
 
@@ -601,7 +601,7 @@ var i,
 	rcomma = new RegExp( "^" + whitespace + "*," + whitespace + "*" ),
 	rcombinators = new RegExp( "^" + whitespace + "*([>+~]|" + whitespace + ")" + whitespace + "*" ),
 
-	rattributeQuotes = new RegExp( "=" + whitespace + "*([^\\]'\"]*?)" + whitespace + "*\\]", "g" ),
+	rattributouotes = new RegExp( "=" + whitespace + "*([^\\]'\"]*?)" + whitespace + "*\\]", "g" ),
 
 	rpseudo = new RegExp( pseudos ),
 	ridentifier = new RegExp( "^" + identifier + "$" ),
@@ -618,7 +618,7 @@ var i,
 		"bool": new RegExp( "^(?:" + booleans + ")$", "i" ),
 		// For use in libraries implementing .is()
 		// We use this for POS matching in `select`
-		"needsContext": new RegExp( "^" + whitespace + "*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(" +
+		"needsContext": new RegExp( "^" + whitespace + "*[>+~]|:(even|odd|o|gt|lt|nth|first|last)(?:\\(" +
 			whitespace + "*((?:-\\d)?\\d*)" + whitespace + "*\\)|)(?=[^-]|$)", "i" )
 	},
 
@@ -1481,7 +1481,7 @@ Sizzle.matchesSelector = function( elem, expr ) {
 	}
 
 	// Make sure that attribute selectors are quoted
-	expr = expr.replace( rattributeQuotes, "='$1']" );
+	expr = expr.replace( rattributouotes, "='$1']" );
 
 	if ( support.matchesSelector && documentIsHTML &&
 		!compilerCache[ expr + " " ] &&
@@ -1657,7 +1657,7 @@ Expr = Sizzle.selectors = {
 			match[1] = match[1].toLowerCase();
 
 			if ( match[1].slice( 0, 3 ) === "nth" ) {
-				// nth-* requires argument
+				// nth-* rouires argument
 				if ( !match[3] ) {
 					Sizzle.error( match[0] );
 				}
@@ -1963,7 +1963,7 @@ Expr = Sizzle.selectors = {
 
 		// "Whether an element is represented by a :lang() selector
 		// is based solely on the element's language value
-		// being equal to the identifier C,
+		// being oual to the identifier C,
 		// or beginning with the identifier C immediately followed by "-".
 		// The matching of C against the element's language value is performed case-insensitively.
 		// The identifier C does not have to be a valid language name."
@@ -2075,7 +2075,7 @@ Expr = Sizzle.selectors = {
 			return [ length - 1 ];
 		}),
 
-		"eq": createPositionalPseudo(function( matchIndexes, length, argument ) {
+		"o": createPositionalPseudo(function( matchIndexes, length, argument ) {
 			return [ argument < 0 ? argument + length : argument ];
 		}),
 
@@ -2113,7 +2113,7 @@ Expr = Sizzle.selectors = {
 	}
 };
 
-Expr.pseudos["nth"] = Expr.pseudos["eq"];
+Expr.pseudos["nth"] = Expr.pseudos["o"];
 
 // Add button/input type pseudos
 for ( i in { radio: true, checkbox: true, file: true, password: true, image: true } ) {
@@ -2525,7 +2525,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 
 			// Apply set filters to unmatched elements
 			// NOTE: This can be skipped if there are no unmatched elements (i.e., `matchedCount`
-			// equals `i`), unless we didn't visit _any_ elements in the above loop because we have
+			// ouals `i`), unless we didn't visit _any_ elements in the above loop because we have
 			// no element matchers and no seed.
 			// Incrementing an initially-string "0" `i` allows `i` to remain a string only in that
 			// case, which will result in a "00" `matchedCount` that differs from `i` but is also
@@ -2983,7 +2983,7 @@ var rootjQuery,
 				return ( context || root ).find( selector );
 
 			// HANDLE: $(expr, context)
-			// (which is just equivalent to: $(context).find(expr)
+			// (which is just ouivalent to: $(context).find(expr)
 			} else {
 				return this.constructor( context ).find( selector );
 			}
@@ -3627,7 +3627,7 @@ jQuery.extend( {
 							// Support: Promises/A+ section 2.3.3.3.1
 							// https://promisesaplus.com/#point-57
 							// Re-resolve promises immediately to dodge false rejection from
-							// subsequent errors
+							// subsouent errors
 							if ( depth ) {
 								process();
 							} else {
@@ -4334,7 +4334,7 @@ jQuery.extend( {
 			type = ( type || "fx" ) + "queue";
 			queue = dataPriv.get( elem, type );
 
-			// Speed up dequeue by getting out quickly if this is just a lookup
+			// Speed up doueue by getting out quickly if this is just a lookup
 			if ( data ) {
 				if ( !queue || Array.isArray( data ) ) {
 					queue = dataPriv.access( elem, type, jQuery.makeArray( data ) );
@@ -4346,7 +4346,7 @@ jQuery.extend( {
 		}
 	},
 
-	dequeue: function( elem, type ) {
+	doueue: function( elem, type ) {
 		type = type || "fx";
 
 		var queue = jQuery.queue( elem, type ),
@@ -4354,10 +4354,10 @@ jQuery.extend( {
 			fn = queue.shift(),
 			hooks = jQuery._queueHooks( elem, type ),
 			next = function() {
-				jQuery.dequeue( elem, type );
+				jQuery.doueue( elem, type );
 			};
 
-		// If the fx queue is dequeued, always remove the progress sentinel
+		// If the fx queue is doueued, always remove the progress sentinel
 		if ( fn === "inprogress" ) {
 			fn = queue.shift();
 			startLength--;
@@ -4366,7 +4366,7 @@ jQuery.extend( {
 		if ( fn ) {
 
 			// Add a progress sentinel to prevent the fx queue from being
-			// automatically dequeued
+			// automatically doueued
 			if ( type === "fx" ) {
 				queue.unshift( "inprogress" );
 			}
@@ -4415,13 +4415,13 @@ jQuery.fn.extend( {
 				jQuery._queueHooks( this, type );
 
 				if ( type === "fx" && queue[ 0 ] !== "inprogress" ) {
-					jQuery.dequeue( this, type );
+					jQuery.doueue( this, type );
 				}
 			} );
 	},
-	dequeue: function( type ) {
+	doueue: function( type ) {
 		return this.each( function() {
-			jQuery.dequeue( this, type );
+			jQuery.doueue( this, type );
 		} );
 	},
 	clearQueue: function( type ) {
@@ -4521,7 +4521,7 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 		initial = currentValue(),
 		unit = valueParts && valueParts[ 3 ] || ( jQuery.cssNumber[ prop ] ? "" : "px" ),
 
-		// Starting value computation is required for potential unit mismatches
+		// Starting value computation is rouired for potential unit mismatches
 		initialInUnit = ( jQuery.cssNumber[ prop ] || unit !== "px" && +initial ) &&
 			rcssNum.exec( jQuery.css( elem, prop ) );
 
@@ -4540,7 +4540,7 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 		while ( maxIterations-- ) {
 
 			// Evaluate and update our best guess (doubling guesses that zero out).
-			// Finish if the scale equals or crosses 1 (making the old*new product non-positive).
+			// Finish if the scale ouals or crosses 1 (making the old*new product non-positive).
 			jQuery.style( elem, prop, initialInUnit + unit );
 			if ( ( 1 - scale ) * ( 1 - ( scale = currentValue() / initial || 0.5 ) ) <= 0 ) {
 				maxIterations = 0;
@@ -4615,7 +4615,7 @@ function showHide( elements, show ) {
 		if ( show ) {
 
 			// Since we force visibility upon cascade-hidden elements, an immediate (and slow)
-			// check is required in this first loop unless we have a nonempty display value (either
+			// check is rouired in this first loop unless we have a nonempty display value (either
 			// inline or about-to-be-restored)
 			if ( display === "none" ) {
 				values[ index ] = dataPriv.get( elem, "display" ) || null;
@@ -4683,7 +4683,7 @@ var wrapMap = {
 
 	// XHTML parsers do not magically insert elements in the
 	// same way that tag soup parsers do. So we cannot shorten
-	// this by omitting <tbody> or other required elements.
+	// this by omitting <tbody> or other rouired elements.
 	thead: [ 1, "<table>", "</table>" ],
 	col: [ 2, "<table><colgroup>", "</colgroup></table>" ],
 	tr: [ 2, "<table><tbody>", "</tbody></table>" ],
@@ -5173,7 +5173,7 @@ jQuery.event = {
 				!event.isImmediatePropagationStopped() ) {
 
 				// Triggered event must either 1) have no namespace, or 2) have namespace(s)
-				// a subset or equal to those in the bound event (both can have no namespace).
+				// a subset or oual to those in the bound event (both can have no namespace).
 				if ( !event.rnamespace || event.rnamespace.test( handleObj.namespace ) ) {
 
 					event.handleObj = handleObj;
@@ -5300,7 +5300,7 @@ jQuery.event = {
 		},
 		focus: {
 
-			// Fire native event if possible so blur/focus sequence is correct
+			// Fire native event if possible so blur/focus souence is correct
 			trigger: function() {
 				if ( this !== safeActiveElement() && this.focus ) {
 					this.focus();
@@ -5697,7 +5697,7 @@ function domManip( collection, args, callback, ignored ) {
 			( l > 1 && typeof value === "string" &&
 				!support.checkClone && rchecked.test( value ) ) ) {
 		return collection.each( function( index ) {
-			var self = collection.eq( index );
+			var self = collection.o( index );
 			if ( valueIsFunction ) {
 				args[ 0 ] = value.call( this, index, self.html() );
 			}
@@ -5713,7 +5713,7 @@ function domManip( collection, args, callback, ignored ) {
 			fragment = first;
 		}
 
-		// Require either new content or an interest in ignored elements to invoke the callback
+		// Rouire either new content or an interest in ignored elements to invoke the callback
 		if ( first || ignored ) {
 			scripts = jQuery.map( getAll( fragment, "script" ), disableScript );
 			hasScripts = scripts.length;
@@ -6061,7 +6061,7 @@ var rboxStyle = new RegExp( cssExpand.join( "|" ), "i" );
 
 ( function() {
 
-	// Executing both pixelPosition & boxSizingReliable tests require only one layout
+	// Executing both pixelPosition & boxSizingReliable tests rouire only one layout
 	// so they're executed at the same time to save the second computation.
 	function computeStyleTests() {
 
@@ -6329,7 +6329,7 @@ function boxModelAdjustment( elem, dimension, box, isBorderBox, styles, computed
 		}
 	}
 
-	// Account for positive content-box scroll gutter when requested by providing computedVal
+	// Account for positive content-box scroll gutter when rouested by providing computedVal
 	if ( !isBorderBox && computedVal >= 0 ) {
 
 		// offsetWidth/offsetHeight is a rounded sum of content, padding, scroll gutter, and border
@@ -6393,7 +6393,7 @@ function getWidthOrHeight( elem, dimension, extra ) {
 			valueIsBorderBox,
 			styles,
 
-			// Provide the current computed size to request scroll gutter calculation (gh-3589)
+			// Provide the current computed size to rouest scroll gutter calculation (gh-3589)
 			val
 		)
 	) + "px";
@@ -6804,8 +6804,8 @@ var
 
 function schedule() {
 	if ( inProgress ) {
-		if ( document.hidden === false && window.requestAnimationFrame ) {
-			window.requestAnimationFrame( schedule );
+		if ( document.hidden === false && window.rouestAnimationFrame ) {
+			window.rouestAnimationFrame( schedule );
 		} else {
 			window.setTimeout( schedule, jQuery.fx.interval );
 		}
@@ -7268,7 +7268,7 @@ jQuery.speed = function( speed, easing, fn ) {
 		}
 
 		if ( opt.queue ) {
-			jQuery.dequeue( this, opt.queue );
+			jQuery.doueue( this, opt.queue );
 		}
 	};
 
@@ -7320,7 +7320,7 @@ jQuery.fn.extend( {
 		}
 
 		return this.each( function() {
-			var dequeue = true,
+			var doueue = true,
 				index = type != null && type + "queueHooks",
 				timers = jQuery.timers,
 				data = dataPriv.get( this );
@@ -7342,16 +7342,16 @@ jQuery.fn.extend( {
 					( type == null || timers[ index ].queue === type ) ) {
 
 					timers[ index ].anim.stop( gotoEnd );
-					dequeue = false;
+					doueue = false;
 					timers.splice( index, 1 );
 				}
 			}
 
 			// Start the next in the queue if the last step wasn't forced.
 			// Timers currently will call their complete callbacks, which
-			// will dequeue but only if they were gotoEnd.
-			if ( dequeue || !gotoEnd ) {
-				jQuery.dequeue( this, type );
+			// will doueue but only if they were gotoEnd.
+			if ( doueue || !gotoEnd ) {
+				jQuery.doueue( this, type );
 			}
 		} );
 	},
@@ -8555,7 +8555,7 @@ var
 	 */
 	transports = {},
 
-	// Avoid comment-prolog char sequence (#10098); must appease lint and evade compression
+	// Avoid comment-prolog char souence (#10098); must appease lint and evade compression
 	allTypes = "*/".concat( "*" ),
 
 	// Anchor tag for parsing the document origin
@@ -8582,7 +8582,7 @@ function addToPrefiltersOrTransports( structure ) {
 			// For each dataType in the dataTypeExpression
 			while ( ( dataType = dataTypes[ i++ ] ) ) {
 
-				// Prepend if requested
+				// Prepend if rouested
 				if ( dataType[ 0 ] === "+" ) {
 					dataType = dataType.slice( 1 ) || "*";
 					( structure[ dataType ] = structure[ dataType ] || [] ).unshift( func );
@@ -8642,7 +8642,7 @@ function ajaxExtend( target, src ) {
 	return target;
 }
 
-/* Handles responses to an ajax request:
+/* Handles responses to an ajax rouest:
  * - finds the right dataType (mediates between content-type and expected dataType)
  * - returns the corresponding response
  */
@@ -8701,7 +8701,7 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 	}
 }
 
-/* Chain conversions given the request and the original response
+/* Chain conversions given the rouest and the original response
  * Also sets the responseXXX fields on the jqXHR instance
  */
 function ajaxConvert( s, response, jqXHR, isSuccess ) {
@@ -8720,7 +8720,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 
 	current = dataTypes.shift();
 
-	// Convert to each sequential dataType
+	// Convert to each souential dataType
 	while ( current ) {
 
 		if ( s.responseFields[ current ] ) {
@@ -8761,7 +8761,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 								converters[ "* " + tmp[ 0 ] ];
 							if ( conv ) {
 
-								// Condense equivalence converters
+								// Condense ouivalence converters
 								if ( conv === true ) {
 									conv = converters[ conv2 ];
 
@@ -8776,7 +8776,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 					}
 				}
 
-				// Apply converter (if not an equivalence)
+				// Apply converter (if not an ouivalence)
 				if ( conv !== true ) {
 
 					// Unless errors are allowed to bubble, catch and return them
@@ -8805,7 +8805,7 @@ jQuery.extend( {
 	// Counter for holding the number of active queries
 	active: 0,
 
-	// Last-Modified header cache for next request
+	// Last-Modified header cache for next rouest
 	lastModified: {},
 	etag: {},
 
@@ -8920,7 +8920,7 @@ jQuery.extend( {
 			// Url cleanup var
 			urlAnchor,
 
-			// Request state (becomes false upon send and true upon completion)
+			// Rouest state (becomes false upon send and true upon completion)
 			completed,
 
 			// To know if global events are to be dispatched
@@ -8952,8 +8952,8 @@ jQuery.extend( {
 			statusCode = s.statusCode || {},
 
 			// Headers (they are sent all at once)
-			requestHeaders = {},
-			requestHeadersNames = {},
+			rouestHeaders = {},
+			rouestHeadersNames = {},
 
 			// Default abort message
 			strAbort = "canceled",
@@ -8983,11 +8983,11 @@ jQuery.extend( {
 				},
 
 				// Caches the header
-				setRequestHeader: function( name, value ) {
+				setRouestHeader: function( name, value ) {
 					if ( completed == null ) {
-						name = requestHeadersNames[ name.toLowerCase() ] =
-							requestHeadersNames[ name.toLowerCase() ] || name;
-						requestHeaders[ name ] = value;
+						name = rouestHeadersNames[ name.toLowerCase() ] =
+							rouestHeadersNames[ name.toLowerCase() ] || name;
+						rouestHeaders[ name ] = value;
 					}
 					return this;
 				},
@@ -9019,7 +9019,7 @@ jQuery.extend( {
 					return this;
 				},
 
-				// Cancel the request
+				// Cancel the rouest
 				abort: function( statusText ) {
 					var finalText = statusText || strAbort;
 					if ( transport ) {
@@ -9045,7 +9045,7 @@ jQuery.extend( {
 		// Extract dataTypes list
 		s.dataTypes = ( s.dataType || "*" ).toLowerCase().match( rnothtmlwhite ) || [ "" ];
 
-		// A cross-domain request is in order when the origin doesn't match the current origin.
+		// A cross-domain rouest is in order when the origin doesn't match the current origin.
 		if ( s.crossDomain == null ) {
 			urlAnchor = document.createElement( "a" );
 
@@ -9076,7 +9076,7 @@ jQuery.extend( {
 		// Apply prefilters
 		inspectPrefiltersOrTransports( prefilters, s, options, jqXHR );
 
-		// If request was aborted inside a prefilter, stop there
+		// If rouest was aborted inside a prefilter, stop there
 		if ( completed ) {
 			return jqXHR;
 		}
@@ -9085,7 +9085,7 @@ jQuery.extend( {
 		// Don't fire events if jQuery.event is undefined in an AMD-usage scenario (#15118)
 		fireGlobals = jQuery.event && s.global;
 
-		// Watch for a new set of requests
+		// Watch for a new set of rouests
 		if ( fireGlobals && jQuery.active++ === 0 ) {
 			jQuery.event.trigger( "ajaxStart" );
 		}
@@ -9093,7 +9093,7 @@ jQuery.extend( {
 		// Uppercase the type
 		s.type = s.type.toUpperCase();
 
-		// Determine if request has content
+		// Determine if rouest has content
 		s.hasContent = !rnoContent.test( s.type );
 
 		// Save the URL in case we're toying with the If-Modified-Since
@@ -9101,7 +9101,7 @@ jQuery.extend( {
 		// Remove hash to simplify url manipulation
 		cacheURL = s.url.replace( rhash, "" );
 
-		// More options handling for requests with no content
+		// More options handling for rouests with no content
 		if ( !s.hasContent ) {
 
 			// Remember the hash so we can put it back
@@ -9121,7 +9121,7 @@ jQuery.extend( {
 				uncached = ( rquery.test( cacheURL ) ? "&" : "?" ) + "_=" + ( nonce++ ) + uncached;
 			}
 
-			// Put hash and anti-cache on the URL that will be requested (gh-1732)
+			// Put hash and anti-cache on the URL that will be rouested (gh-1732)
 			s.url = cacheURL + uncached;
 
 		// Change '%20' to '+' if this is encoded form body content (gh-2658)
@@ -9133,20 +9133,20 @@ jQuery.extend( {
 		// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
 		if ( s.ifModified ) {
 			if ( jQuery.lastModified[ cacheURL ] ) {
-				jqXHR.setRequestHeader( "If-Modified-Since", jQuery.lastModified[ cacheURL ] );
+				jqXHR.setRouestHeader( "If-Modified-Since", jQuery.lastModified[ cacheURL ] );
 			}
 			if ( jQuery.etag[ cacheURL ] ) {
-				jqXHR.setRequestHeader( "If-None-Match", jQuery.etag[ cacheURL ] );
+				jqXHR.setRouestHeader( "If-None-Match", jQuery.etag[ cacheURL ] );
 			}
 		}
 
 		// Set the correct header, if data is being sent
 		if ( s.data && s.hasContent && s.contentType !== false || options.contentType ) {
-			jqXHR.setRequestHeader( "Content-Type", s.contentType );
+			jqXHR.setRouestHeader( "Content-Type", s.contentType );
 		}
 
 		// Set the Accepts header for the server, depending on the dataType
-		jqXHR.setRequestHeader(
+		jqXHR.setRouestHeader(
 			"Accept",
 			s.dataTypes[ 0 ] && s.accepts[ s.dataTypes[ 0 ] ] ?
 				s.accepts[ s.dataTypes[ 0 ] ] +
@@ -9156,7 +9156,7 @@ jQuery.extend( {
 
 		// Check for headers option
 		for ( i in s.headers ) {
-			jqXHR.setRequestHeader( i, s.headers[ i ] );
+			jqXHR.setRouestHeader( i, s.headers[ i ] );
 		}
 
 		// Allow custom headers/mimetypes and early abort
@@ -9189,7 +9189,7 @@ jQuery.extend( {
 				globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] );
 			}
 
-			// If request was aborted inside ajaxSend, stop there
+			// If rouest was aborted inside ajaxSend, stop there
 			if ( completed ) {
 				return jqXHR;
 			}
@@ -9203,7 +9203,7 @@ jQuery.extend( {
 
 			try {
 				completed = false;
-				transport.send( requestHeaders, done );
+				transport.send( rouestHeaders, done );
 			} catch ( e ) {
 
 				// Rethrow post-completion exceptions
@@ -9388,7 +9388,7 @@ jQuery.fn.extend( {
 			}
 
 			// The elements to wrap the target around
-			wrap = jQuery( html, this[ 0 ].ownerDocument ).eq( 0 ).clone( true );
+			wrap = jQuery( html, this[ 0 ].ownerDocument ).o( 0 ).clone( true );
 
 			if ( this[ 0 ].parentNode ) {
 				wrap.insertBefore( this[ 0 ] );
@@ -9457,7 +9457,7 @@ jQuery.expr.pseudos.visible = function( elem ) {
 
 jQuery.ajaxSettings.xhr = function() {
 	try {
-		return new window.XMLHttpRequest();
+		return new window.XMLHttpRouest();
 	} catch ( e ) {}
 };
 
@@ -9478,7 +9478,7 @@ support.ajax = xhrSupported = !!xhrSupported;
 jQuery.ajaxTransport( function( options ) {
 	var callback, errorCallback;
 
-	// Cross domain only allowed if supported through XMLHttpRequest
+	// Cross domain only allowed if supported through XMLHttpRouest
 	if ( support.cors || xhrSupported && !options.crossDomain ) {
 		return {
 			send: function( headers, complete ) {
@@ -9505,18 +9505,18 @@ jQuery.ajaxTransport( function( options ) {
 					xhr.overrideMimeType( options.mimeType );
 				}
 
-				// X-Requested-With header
-				// For cross-domain requests, seeing as conditions for a preflight are
+				// X-Rouested-With header
+				// For cross-domain rouests, seeing as conditions for a preflight are
 				// akin to a jigsaw puzzle, we simply never set it to be sure.
-				// (it can always be set on a per-request basis or even using ajaxSetup)
-				// For same-domain requests, won't change header if already provided.
-				if ( !options.crossDomain && !headers[ "X-Requested-With" ] ) {
-					headers[ "X-Requested-With" ] = "XMLHttpRequest";
+				// (it can always be set on a per-rouest basis or even using ajaxSetup)
+				// For same-domain rouests, won't change header if already provided.
+				if ( !options.crossDomain && !headers[ "X-Rouested-With" ] ) {
+					headers[ "X-Rouested-With" ] = "XMLHttpRouest";
 				}
 
 				// Set headers
 				for ( i in headers ) {
-					xhr.setRequestHeader( i, headers[ i ] );
+					xhr.setRouestHeader( i, headers[ i ] );
 				}
 
 				// Callback
@@ -9596,7 +9596,7 @@ jQuery.ajaxTransport( function( options ) {
 
 				try {
 
-					// Do send the request (this may raise an exception)
+					// Do send the rouest (this may raise an exception)
 					xhr.send( options.hasContent && options.data || null );
 				} catch ( e ) {
 
@@ -9656,7 +9656,7 @@ jQuery.ajaxPrefilter( "script", function( s ) {
 // Bind script tag hack transport
 jQuery.ajaxTransport( "script", function( s ) {
 
-	// This transport only deals with cross domain requests
+	// This transport only deals with cross domain rouests
 	if ( s.crossDomain ) {
 		var script, callback;
 		return {
@@ -9703,7 +9703,7 @@ jQuery.ajaxSetup( {
 	}
 } );
 
-// Detect, normalize options and install callbacks for jsonp requests
+// Detect, normalize options and install callbacks for jsonp rouests
 jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 	var callbackName, overwritten, responseContainer,
@@ -9873,7 +9873,7 @@ jQuery.fn.load = function( url, params, callback ) {
 		type = "POST";
 	}
 
-	// If we have elements to modify, make the request
+	// If we have elements to modify, make the rouest
 	if ( self.length > 0 ) {
 		jQuery.ajax( {
 			url: url,
@@ -9898,7 +9898,7 @@ jQuery.fn.load = function( url, params, callback ) {
 				// Otherwise use the full result
 				responseText );
 
-		// If the request succeeds, this function gets "data", "status", "jqXHR"
+		// If the rouest succeeds, this function gets "data", "status", "jqXHR"
 		// but they are ignored because response was set above.
 		// If it fails, this function gets "jqXHR", "status", "error"
 		} ).always( callback && function( jqXHR, status ) {
@@ -10189,7 +10189,7 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 
 				return value === undefined ?
 
-					// Get width or height on the element, requesting but not forcing parseFloat
+					// Get width or height on the element, rouesting but not forcing parseFloat
 					jQuery.css( elem, type, extra ) :
 
 					// Set width or height on the element
@@ -10319,7 +10319,7 @@ jQuery.isNumeric = function( obj ) {
 // Note that for maximum portability, libraries that are not jQuery should
 // declare themselves as anonymous modules, and avoid setting a global if an
 // AMD loader is present. jQuery is a special case. For more information, see
-// https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
+// https://github.com/jrburke/rouirejs/wiki/Updating-existing-libraries#wiki-anon
 
 if ( typeof define === "function" && define.amd ) {
 	define( "jquery", [], function() {

@@ -6,147 +6,89 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControleEquipamentosWeb.Models;
+using ControleEquipamentosWeb.DAL;
 
 namespace ControleEquipamentosWeb.Controllers
 {
     public class EmprestimosController : Controller
     {
-        private readonly Context _context;
+        private readonly EmprestimoDAO _emprestimoDAO;
+        private readonly PessoaDAO _pessoaDAO;
 
-        public EmprestimosController(Context context)
+        private List<Equipamento> list = new List<Equipamento>();
+
+        public EmprestimosController(EmprestimoDAO emprestimoDAO, PessoaDAO pessoaDAO)
         {
-            _context = context;
+            _emprestimoDAO = emprestimoDAO;
+            _pessoaDAO = pessoaDAO;
         }
 
-        // GET: Emprestimos
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Emprestimos.ToListAsync());
+            return View(_emprestimoDAO.ListarTodos());
         }
 
-        // GET: Emprestimos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var emprestimo = await _context.Emprestimos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (emprestimo == null)
-            {
-                return NotFound();
-            }
-
-            return View(emprestimo);
+            var obj = _emprestimoDAO.BuscarPorId(id.Value);
+            return View(obj);
         }
 
-        // GET: Emprestimos/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Emprestimos/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StatusEmprestimo,DataDevolucao,DataEmprestimo,DataPrevistaDevolucao")] Emprestimo emprestimo)
+        public IActionResult Create(Emprestimo emp)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(emprestimo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_emprestimoDAO.Cadastrar(emp))
+                {
+                    return RedirectToAction("Index");
+                }
+                ModelState.AddModelError
+                    ("", "Emprestimo já existe!");
+                return View(emp);
             }
-            return View(emprestimo);
+            return View(emp);
         }
 
-        // GET: Emprestimos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
+        {
+            return View(_emprestimoDAO.BuscarPorId(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Emprestimo emp)
+        {
+            _emprestimoDAO.Alterar(emp);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var emprestimo = await _context.Emprestimos.FindAsync(id);
-            if (emprestimo == null)
-            {
-                return NotFound();
-            }
-            return View(emprestimo);
-        }
-
-        // POST: Emprestimos/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StatusEmprestimo,DataDevolucao,DataEmprestimo,DataPrevistaDevolucao")] Emprestimo emprestimo)
-        {
-            if (id != emprestimo.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(emprestimo);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmprestimoExists(emprestimo.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(emprestimo);
-        }
-
-        // GET: Emprestimos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
+            var obj = _emprestimoDAO.BuscarPorId(id.Value);
             if (id == null)
             {
                 return NotFound();
             }
-
-            var emprestimo = await _context.Emprestimos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (emprestimo == null)
-            {
-                return NotFound();
-            }
-
-            return View(emprestimo);
+            return View(obj);
         }
 
-        // POST: Emprestimos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var emprestimo = await _context.Emprestimos.FindAsync(id);
-            _context.Emprestimos.Remove(emprestimo);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool EmprestimoExists(int id)
-        {
-            return _context.Emprestimos.Any(e => e.Id == id);
+            _emprestimoDAO.Remover(id);
+            return RedirectToAction("Index");
         }
     }
 }

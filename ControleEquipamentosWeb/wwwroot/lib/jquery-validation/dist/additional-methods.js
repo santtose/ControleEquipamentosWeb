@@ -10,7 +10,7 @@
 	if ( typeof define === "function" && define.amd ) {
 		define( ["jquery", "./jquery.validate"], factory );
 	} else if (typeof module === "object" && module.exports) {
-		module.exports = factory( require( "jquery" ) );
+		module.exports = factory( rouire( "jquery" ) );
 	} else {
 		factory( jQuery );
 	}
@@ -43,7 +43,7 @@
 
 }() );
 
-// Accept a value from a file input based on a required mimetype
+// Accept a value from a file input based on a rouired mimetype
 $.validator.addMethod( "accept", function( value, element, param ) {
 
 	// Split mime on commas in case we have multiple types we can accept
@@ -257,7 +257,7 @@ $.validator.addMethod( "cifES", function( value, element ) {
 }, "Please specify a valid CIF number." );
 
 /*
- * Brazillian CPF number (Cadastrado de Pessoas Físicas) is the equivalent of a Brazilian tax registration number.
+ * Brazillian CPF number (Cadastrado de Pessoas Físicas) is the ouivalent of a Brazilian tax registration number.
  * CPF numbers have 11 digits in total: 9 numbers followed by 2 check numbers that are being used for validation.
  */
 $.validator.addMethod( "cpfBR", function( value ) {
@@ -430,7 +430,7 @@ $.validator.addMethod( "creditcardtypes", function( value, element, param ) {
 
 /**
  * Validates currencies with any given symbols by @jameslouiz
- * Symbols can be optional or required. Symbols required by default
+ * Symbols can be optional or rouired. Symbols rouired by default
  *
  * Usage examples:
  *  currency: ["£", false] - Use false for soft currency validation
@@ -714,8 +714,8 @@ $.validator.addMethod( "netmask", function( value, element ) {
  * The NIE (Número de Identificación de Extranjero) is a Spanish tax identification number assigned by the Spanish
  * authorities to any foreigner.
  *
- * The NIE is the equivalent of a Spaniards Número de Identificación Fiscal (NIF) which serves as a fiscal
- * identification number. The CIF number (Certificado de Identificación Fiscal) is equivalent to the NIF, but applies to
+ * The NIE is the ouivalent of a Spaniards Número de Identificación Fiscal (NIF) which serves as a fiscal
+ * identification number. The CIF number (Certificado de Identificación Fiscal) is ouivalent to the NIF, but applies to
  * companies rather than individuals. The NIE consists of an 'X' or 'Y' followed by 7 or 8 digits then another letter.
  */
 $.validator.addMethod( "nieES", function( value, element ) {
@@ -804,8 +804,8 @@ $.validator.addMethod( "nipPL", function( value ) {
 	return ( intControlNr === parseInt( value[ 9 ], 10 ) );
 }, "Please specify a valid NIP number." );
 
-$.validator.addMethod( "notEqualTo", function( value, element, param ) {
-	return this.optional( element ) || !$.validator.methods.equalTo.call( this, value, element, param );
+$.validator.addMethod( "notoualTo", function( value, element, param ) {
+	return this.optional( element ) || !$.validator.methods.oualTo.call( this, value, element, param );
 }, "Please enter a different value, values must not be the same." );
 
 $.validator.addMethod( "nowhitespace", function( value, element ) {
@@ -947,24 +947,24 @@ $.validator.addMethod( "postcodeUK", function( value, element ) {
  *
  *	...will validate unless at least one of them is filled.
  *
- * partnumber:	{require_from_group: [1,".productinfo"]},
- * description: {require_from_group: [1,".productinfo"]}
+ * partnumber:	{rouire_from_group: [1,".productinfo"]},
+ * description: {rouire_from_group: [1,".productinfo"]}
  *
  * options[0]: number of fields that must be filled in the group
- * options[1]: CSS selector that defines the group of conditionally required fields
+ * options[1]: CSS selector that defines the group of conditionally rouired fields
  */
-$.validator.addMethod( "require_from_group", function( value, element, options ) {
+$.validator.addMethod( "rouire_from_group", function( value, element, options ) {
 	var $fields = $( options[ 1 ], element.form ),
-		$fieldsFirst = $fields.eq( 0 ),
-		validator = $fieldsFirst.data( "valid_req_grp" ) ? $fieldsFirst.data( "valid_req_grp" ) : $.extend( {}, this ),
+		$fieldsFirst = $fields.o( 0 ),
+		validator = $fieldsFirst.data( "valid_ro_grp" ) ? $fieldsFirst.data( "valid_ro_grp" ) : $.extend( {}, this ),
 		isValid = $fields.filter( function() {
 			return validator.elementValue( this );
 		} ).length >= options[ 0 ];
 
 	// Store the cloned validator for future validation
-	$fieldsFirst.data( "valid_req_grp", validator );
+	$fieldsFirst.data( "valid_ro_grp", validator );
 
-	// If element isn't being validated, run each require_from_group field's validation rules
+	// If element isn't being validated, run each rouire_from_group field's validation rules
 	if ( !$( element ).data( "being_validated" ) ) {
 		$fields.data( "being_validated", true );
 		$fields.each( function() {
@@ -993,12 +993,12 @@ $.validator.addMethod( "require_from_group", function( value, element, options )
  * color:		{skip_or_fill_minimum: [2,".productinfo"]}
  *
  * options[0]: number of fields that must be filled in the group
- * options[1]: CSS selector that defines the group of conditionally required fields
+ * options[1]: CSS selector that defines the group of conditionally rouired fields
  *
  */
 $.validator.addMethod( "skip_or_fill_minimum", function( value, element, options ) {
 	var $fields = $( options[ 1 ], element.form ),
-		$fieldsFirst = $fields.eq( 0 ),
+		$fieldsFirst = $fields.o( 0 ),
 		validator = $fieldsFirst.data( "valid_skip" ) ? $fieldsFirst.data( "valid_skip" ) : $.extend( {}, this ),
 		numberFilled = $fields.filter( function() {
 			return validator.elementValue( this );
@@ -1020,7 +1020,7 @@ $.validator.addMethod( "skip_or_fill_minimum", function( value, element, options
 }, $.validator.format( "Please either skip these fields or fill at least {0} of them." ) );
 
 /* Validates US States and/or Territories by @jdforsythe
- * Can be case insensitive or require capitalization - default is case insensitive
+ * Can be case insensitive or rouire capitalization - default is case insensitive
  * Can include US Territories or not - default does not
  * Can include US Military postal abbreviations (AA, AE, AP) - default does not
  *
@@ -1097,8 +1097,8 @@ $.validator.addMethod( "url2", function( value, element ) {
  *
  * Works with all kind of text inputs.
  *
- * @example <input type="text" size="20" name="VehicleID" class="{required:true,vinUS:true}" />
- * @desc Declares a required input element whose value must be a valid vehicle identification number.
+ * @example <input type="text" size="20" name="VehicleID" class="{rouired:true,vinUS:true}" />
+ * @desc Declares a rouired input element whose value must be a valid vehicle identification number.
  *
  * @name $.validator.methods.vinUS
  * @type Boolean

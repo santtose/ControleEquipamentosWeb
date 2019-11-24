@@ -6,147 +6,91 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControleEquipamentosWeb.Models;
+using ControleEquipamentosWeb.DAL;
 
 namespace ControleEquipamentosWeb.Controllers
 {
     public class OcorrenciasController : Controller
     {
-        private readonly Context _context;
+        private readonly OcorrenciaDAO _ocorrenciaDAO;
+        private readonly EquipamentoDAO _equipamentoDAO;
 
-        public OcorrenciasController(Context context)
+        public OcorrenciasController(OcorrenciaDAO ocorrenciaDAO, EquipamentoDAO equipamentoDAO)
         {
-            _context = context;
+            _ocorrenciaDAO = ocorrenciaDAO;
+            _equipamentoDAO = equipamentoDAO;
         }
 
-        // GET: Ocorrencias
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Ocorrencias.ToListAsync());
+            return View(_ocorrenciaDAO.ListarTodos());
         }
 
-        // GET: Ocorrencias/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ocorrencia = await _context.Ocorrencias
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ocorrencia == null)
-            {
-                return NotFound();
-            }
-
-            return View(ocorrencia);
+            var obj = _ocorrenciaDAO.BuscarPorId(id.Value);
+            return View(obj);
         }
 
-        // GET: Ocorrencias/Create
         public IActionResult Create()
         {
+            ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "Descricao");
             return View();
         }
 
-        // POST: Ocorrencias/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Descricao,DataOcorrencia,OrdemDeServico,PrevisaoRetorno,DataDevolucao")] Ocorrencia ocorrencia)
+        public IActionResult Create(Ocorrencia o, int drpEquipamentos)
         {
+            ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "Descricao");
+            o.Equipamento = _equipamentoDAO.BuscarPorId(drpEquipamentos);
+
             if (ModelState.IsValid)
             {
-                _context.Add(ocorrencia);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_ocorrenciaDAO.Cadastrar(o))
+                {
+                    return RedirectToAction("Index");
+                }
+                ModelState.AddModelError
+                    ("", "Ocorrência já existe!");
+                return View(o);
             }
-            return View(ocorrencia);
+            return View(o);
         }
 
-        // GET: Ocorrencias/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
+        {
+            return View(_ocorrenciaDAO.BuscarPorId(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Ocorrencia o)
+        {
+            _ocorrenciaDAO.Alterar(o);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var ocorrencia = await _context.Ocorrencias.FindAsync(id);
-            if (ocorrencia == null)
-            {
-                return NotFound();
-            }
-            return View(ocorrencia);
-        }
-
-        // POST: Ocorrencias/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Descricao,DataOcorrencia,OrdemDeServico,PrevisaoRetorno,DataDevolucao")] Ocorrencia ocorrencia)
-        {
-            if (id != ocorrencia.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(ocorrencia);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OcorrenciaExists(ocorrencia.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(ocorrencia);
-        }
-
-        // GET: Ocorrencias/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
+            var obj = _ocorrenciaDAO.BuscarPorId(id.Value);
             if (id == null)
             {
                 return NotFound();
             }
-
-            var ocorrencia = await _context.Ocorrencias
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ocorrencia == null)
-            {
-                return NotFound();
-            }
-
-            return View(ocorrencia);
+            return View(obj);
         }
 
-        // POST: Ocorrencias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var ocorrencia = await _context.Ocorrencias.FindAsync(id);
-            _context.Ocorrencias.Remove(ocorrencia);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool OcorrenciaExists(int id)
-        {
-            return _context.Ocorrencias.Any(e => e.Id == id);
+            _ocorrenciaDAO.Remover(id);
+            return RedirectToAction("Index");
         }
     }
 }

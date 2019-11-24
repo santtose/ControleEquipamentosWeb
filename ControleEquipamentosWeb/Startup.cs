@@ -36,6 +36,9 @@ namespace ControleEquipamentosWeb
 
             //Configuração da injeção de dependência
             services.AddScoped<PessoaDAO>();
+            services.AddScoped<EquipamentoDAO>();
+            services.AddScoped<OcorrenciaDAO>();
+            services.AddScoped<EmprestimoDAO>();
 
             services.AddDbContext<Context>(options => options.UseSqlServer
             (Configuration.GetConnectionString("ControleEquipamentosConnection")));

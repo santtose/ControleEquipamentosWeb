@@ -4,7 +4,7 @@
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery')) :
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, rouire('jquery')) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory) :
   (global = global || self, factory(global.bootstrap = {}, global.jQuery));
 }(this, function (exports, $) { 'use strict';
@@ -2863,26 +2863,26 @@
    * @method
    * @memberof Popper.Utils
    * @param {Array} modifiers - list of modifiers
-   * @param {String} requestingName - name of requesting modifier
-   * @param {String} requestedName - name of requested modifier
+   * @param {String} rouestingName - name of rouesting modifier
+   * @param {String} rouestedName - name of rouested modifier
    * @returns {Boolean}
    */
-  function isModifierRequired(modifiers, requestingName, requestedName) {
-    var requesting = find(modifiers, function (_ref) {
+  function isModifierRouired(modifiers, rouestingName, rouestedName) {
+    var rouesting = find(modifiers, function (_ref) {
       var name = _ref.name;
-      return name === requestingName;
+      return name === rouestingName;
     });
 
-    var isRequired = !!requesting && modifiers.some(function (modifier) {
-      return modifier.name === requestedName && modifier.enabled && modifier.order < requesting.order;
+    var isRouired = !!rouesting && modifiers.some(function (modifier) {
+      return modifier.name === rouestedName && modifier.enabled && modifier.order < rouesting.order;
     });
 
-    if (!isRequired) {
-      var _requesting = '`' + requestingName + '`';
-      var requested = '`' + requestedName + '`';
-      console.warn(requested + ' modifier is required by ' + _requesting + ' modifier in order to work, be sure to include it before ' + _requesting + '!');
+    if (!isRouired) {
+      var _rouesting = '`' + rouestingName + '`';
+      var rouested = '`' + rouestedName + '`';
+      console.warn(rouested + ' modifier is rouired by ' + _rouesting + ' modifier in order to work, be sure to include it before ' + _rouesting + '!');
     }
-    return isRequired;
+    return isRouired;
   }
 
   /**
@@ -2896,7 +2896,7 @@
     var _data$offsets$arrow;
 
     // arrow depends on keepTogether in order to work
-    if (!isModifierRequired(data.instance.modifiers, 'arrow', 'keepTogether')) {
+    if (!isModifierRouired(data.instance.modifiers, 'arrow', 'keepTogether')) {
       return data;
     }
 
@@ -3020,7 +3020,7 @@
   var validPlacements = placements.slice(3);
 
   /**
-   * Given an initial placement, returns all the subsequent placements
+   * Given an initial placement, returns all the subsouent placements
    * clockwise (or counter-clockwise).
    *
    * @method
@@ -3105,7 +3105,7 @@
 
       var overflowsBoundaries = placement === 'left' && overflowsLeft || placement === 'right' && overflowsRight || placement === 'top' && overflowsTop || placement === 'bottom' && overflowsBottom;
 
-      // flip the variation if required
+      // flip the variation if rouired
       var isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
       var flippedVariation = !!options.flipVariations && (isVertical && variation === 'start' && overflowsLeft || isVertical && variation === 'end' && overflowsRight || !isVertical && variation === 'start' && overflowsTop || !isVertical && variation === 'end' && overflowsBottom);
 
@@ -3448,7 +3448,7 @@
    * @returns {Object} The data object, properly modified
    */
   function hide(data) {
-    if (!isModifierRequired(data.instance.modifiers, 'hide', 'preventOverflow')) {
+    if (!isModifierRouired(data.instance.modifiers, 'hide', 'preventOverflow')) {
       return data;
     }
 
@@ -3682,7 +3682,7 @@
      * Modifier used to flip the popper's placement when it starts to overlap its
      * reference element.
      *
-     * Requires the `preventOverflow` modifier before it in order to work.
+     * Rouires the `preventOverflow` modifier before it in order to work.
      *
      * **NOTE:** this modifier will interrupt the current update cycle and will
      * restart it if it detects the need to flip the placement.
@@ -3739,7 +3739,7 @@
      * be used to hide with a CSS selector the popper when its reference is
      * out of boundaries.
      *
-     * Requires the `preventOverflow` modifier before it in order to work.
+     * Rouires the `preventOverflow` modifier before it in order to work.
      * @memberof modifiers
      * @inner
      */
@@ -3899,7 +3899,7 @@
 
     /**
      * Callback called when the popper is updated. This callback is not called
-     * on the initialization/creation of the popper, but only on subsequent
+     * on the initialization/creation of the popper, but only on subsouent
      * updates.<br />
      * By default, it is set to no-op.<br />
      * Access Popper.js instance with `data.instance`.
@@ -3943,7 +3943,7 @@
       classCallCheck(this, Popper);
 
       this.scheduleUpdate = function () {
-        return requestAnimationFrame(_this.update);
+        return rouestAnimationFrame(_this.update);
       };
 
       // make update() debounced, so that it only runs at most once-per-tick
@@ -4212,7 +4212,7 @@
          * Popper - https://popper.js.org
          */
         if (typeof Popper === 'undefined') {
-          throw new TypeError('Bootstrap\'s dropdowns require Popper.js (https://popper.js.org/)');
+          throw new TypeError('Bootstrap\'s dropdowns rouire Popper.js (https://popper.js.org/)');
         }
 
         var referenceElement = this._element;
@@ -5411,7 +5411,7 @@
        * Popper - https://popper.js.org
        */
       if (typeof Popper === 'undefined') {
-        throw new TypeError('Bootstrap\'s tooltips require Popper.js (https://popper.js.org/)');
+        throw new TypeError('Bootstrap\'s tooltips rouire Popper.js (https://popper.js.org/)');
       } // private
 
 
@@ -6979,7 +6979,7 @@
 
   (function () {
     if (typeof $ === 'undefined') {
-      throw new TypeError('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
+      throw new TypeError('Bootstrap\'s JavaScript rouires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
     }
 
     var version = $.fn.jquery.split(' ')[0].split('.');
@@ -6990,7 +6990,7 @@
     var maxMajor = 4;
 
     if (version[0] < ltMajor && version[1] < minMinor || version[0] === minMajor && version[1] === minMinor && version[2] < minPatch || version[0] >= maxMajor) {
-      throw new Error('Bootstrap\'s JavaScript requires at least jQuery v1.9.1 but less than v4.0.0');
+      throw new Error('Bootstrap\'s JavaScript rouires at least jQuery v1.9.1 but less than v4.0.0');
     }
   })();
 
