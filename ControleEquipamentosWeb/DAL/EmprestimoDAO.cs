@@ -18,18 +18,9 @@ namespace ControleEquipamentosWeb.DAL
 
         public bool Cadastrar(Emprestimo emp)
         {
-            if (BuscarPorNome(emp) == null)
-            {
-                _context.Emprestimos.Add(emp);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
-        public Emprestimo BuscarPorNome(Emprestimo emp)
-        {
-            return _context.Emprestimos.FirstOrDefault(x => x.Id.Equals(emp.Id));
+            _context.Emprestimos.Add(emp);
+            _context.SaveChanges();
+            return true;
         }
 
         public Emprestimo BuscarPorId(int? id)
@@ -44,6 +35,7 @@ namespace ControleEquipamentosWeb.DAL
 
         public List<Emprestimo> ListarEmprestimosAtrasados() => _context.Emprestimos.Where(x => x.DataPrevistaDevolucao < DateTime.Now).ToList();
 
+        //trocar por uma viewmodel de pesquisa
         public List<Emprestimo> ListarComParametros(int? idUsuario, int? idOperador, DateTime? dataInicio, DateTime? dataFim,
             DateTime? dataPrevistaDevolucaoInicio, DateTime? dataPrevistaDevolucaoFim, int? idEquipamento, bool atrasadosApenas, bool excluiFinalizados)
         {

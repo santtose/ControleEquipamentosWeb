@@ -18,19 +18,9 @@ namespace ControleEquipamentosWeb.DAL
 
         public bool Cadastrar(Ocorrencia o)
         {
-            if (BuscarPorNome(o) == null)
-            {
-                _context.Ocorrencias.Add(o);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
-        public Ocorrencia BuscarPorNome(Ocorrencia o)
-        {
-            return _context.Ocorrencias.Include(x => x.Equipamento)
-                .FirstOrDefault(x => x.OrdemDeServico.Equals(o.OrdemDeServico));
+            _context.Ocorrencias.Add(o);
+            _context.SaveChanges();
+            return true;
         }
 
         public Ocorrencia BuscarPorId(int? id)

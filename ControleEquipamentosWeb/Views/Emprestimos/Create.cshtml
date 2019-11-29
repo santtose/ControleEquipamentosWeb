@@ -1,4 +1,4 @@
-﻿@model ControleEquipamentosWeb.Models.Emprestimo
+﻿@model ControleEquipamentosWeb.ViewModels.EmprestimoViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -12,16 +12,6 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="StatusEmprestimo" /> @Html.DisplayNameFor(model => model.StatusEmprestimo)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataDevolucao" class="control-label"></label>
-                <input asp-for="DataDevolucao" class="form-control" />
-                <span asp-validation-for="DataDevolucao" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="DataEmprestimo" class="control-label"></label>
                 <input asp-for="DataEmprestimo" class="form-control" />
@@ -36,6 +26,106 @@
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+    <div class="col-md-8">
+        <div class="container">
+            <table class="table table-striped" height="50%">
+                <thead class="table-primary">
+                    <tr>
+                        <th></th>
+                        <th>
+                            Descricao
+                        </th>
+                        <th>
+                            Marca
+                        </th>
+                        <th>
+                            Modelo
+                        </th>
+                        <th>
+                            #Registro
+                        </th>
+                        <th>
+                            Criado Em
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.EquipamentosDisponiveis)
+                    {
+                        <tr>
+                            <td>
+                                <a class="btn btn-primary" asp-action="AdicionarEquipamento" asp-controller="Emprestimos" asp-route-id="@item.Id">Incluir</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descricao)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Marca)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Modelo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumeroRegistro)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CriadoEm)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="container">
+            <table class="table table-striped" height="50%">
+                <thead class="table-primary">
+                    <tr>
+                        <th></th>
+                        <th>
+                            Descricao
+                        </th>
+                        <th>
+                            Marca
+                        </th>
+                        <th>
+                            Modelo
+                        </th>
+                        <th>
+                            #Registro
+                        </th>
+                        <th>
+                            Criado Em
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.EquipamentosEscolhidos)
+                    {
+                        <tr>
+                            <td>
+                                <a class="btn btn-primary" asp-action="RemoverEquipamento" asp-controller="Emprestimos" asp-route-id="@item.Id">Excluir</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descricao)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Marca)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Modelo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumeroRegistro)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CriadoEm)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

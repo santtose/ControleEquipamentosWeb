@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ControleEquipamentosWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ControleEquipamentosWeb.Models
+namespace ControleEquipamentosWeb.ViewModels
 {
-    public class Emprestimo
+    public class EmprestimoViewModel
     {
         public int Id { get; set; }
         public bool StatusEmprestimo { get; set; } = false;
@@ -14,6 +15,7 @@ namespace ControleEquipamentosWeb.Models
         public DateTime DataPrevistaDevolucao { get; set; }
         public Pessoa Operador { get; set; }
         public Pessoa Usuario { get; set; }
-        public List<Equipamento> Equipamentos { get; set; } = new List<Equipamento>();
+        public List<Equipamento> EquipamentosDisponiveis { get; set; } = new List<Equipamento>();
+        public List<Equipamento> EquipamentosEscolhidos { get; set; } = new List<Equipamento>();
     }
 }

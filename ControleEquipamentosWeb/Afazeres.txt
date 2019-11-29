@@ -1,7 +1,9 @@
 ﻿Evolução
-- Criar DAOs
-- Criar Controllers (via scaffold)
+X Criar DAOs
+X Criar Controllers (via scaffold)
 - Remover o acesso a dados dos controllers
+- ViewModel para fazer as telas que contem pesquisas
+- ViewModel para fazer o dashboard inicial (se der tempo)
 
 Melhoria
 - Colocar Data Annotations

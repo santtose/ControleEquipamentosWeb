@@ -35,7 +35,9 @@ namespace ControleEquipamentosWeb.Controllers
         // GET: Pessoas/Create
         public IActionResult Create()
         {
-            return View();
+            Pessoa modelo = new Pessoa();
+            modelo.Aniversario = DateTime.Now;
+            return View(modelo);
         }
 
         // POST: Pessoas/Create

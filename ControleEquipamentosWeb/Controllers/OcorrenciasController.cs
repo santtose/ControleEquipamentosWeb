@@ -34,7 +34,7 @@ namespace ControleEquipamentosWeb.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "Descricao");
+            ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "NumeroRegistro");
             return View();
         }
 
@@ -42,7 +42,7 @@ namespace ControleEquipamentosWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Ocorrencia o, int drpEquipamentos)
         {
-            ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "Descricao");
+            ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "NumeroRegistro");
             o.Equipamento = _equipamentoDAO.BuscarPorId(drpEquipamentos);
 
             if (ModelState.IsValid)

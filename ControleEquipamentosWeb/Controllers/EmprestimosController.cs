@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControleEquipamentosWeb.Models;
 using ControleEquipamentosWeb.DAL;
+using ControleEquipamentosWeb.Utils;
+using ControleEquipamentosWeb.ViewModels;
 
 namespace ControleEquipamentosWeb.Controllers
 {
@@ -14,13 +16,17 @@ namespace ControleEquipamentosWeb.Controllers
     {
         private readonly EmprestimoDAO _emprestimoDAO;
         private readonly PessoaDAO _pessoaDAO;
+        private readonly EquipamentoDAO _equipamentoDAO;
+        private readonly UtilsSession _utilsSession;
 
         private List<Equipamento> list = new List<Equipamento>();
 
-        public EmprestimosController(EmprestimoDAO emprestimoDAO, PessoaDAO pessoaDAO)
+        public EmprestimosController(EmprestimoDAO emprestimoDAO, PessoaDAO pessoaDAO, EquipamentoDAO equipamentoDAO, UtilsSession utilsSession)
         {
             _emprestimoDAO = emprestimoDAO;
             _pessoaDAO = pessoaDAO;
+            _equipamentoDAO = equipamentoDAO;
+            _utilsSession = utilsSession;
         }
 
         public IActionResult Index()
@@ -36,7 +42,11 @@ namespace ControleEquipamentosWeb.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            EmprestimoViewModel modelo = new EmprestimoViewModel();
+            //TODO: Listar Apenas os equipamentos disponiveis
+            modelo.EquipamentosDisponiveis = _equipamentoDAO.ListarTodos();
+            modelo.EquipamentosEscolhidos = new List<Equipamento>();
+            return View(modelo);
         }
 
         [HttpPost]
@@ -54,6 +64,24 @@ namespace ControleEquipamentosWeb.Controllers
                 return View(emp);
             }
             return View(emp);
+        }
+
+        public IActionResult AdicionarEquipamento(EmprestimoViewModel modelo, int id)
+        {
+            Equipamento equipamento = _equipamentoDAO.BuscarPorId(id);
+            modelo.EquipamentosDisponiveis.Remove(equipamento);
+            modelo.EquipamentosEscolhidos.Add(equipamento);
+
+            return View("Create", modelo);
+        }
+
+        public IActionResult RemoverEquipamento(EmprestimoViewModel modelo, int id)
+        {
+            Equipamento equipamento = _equipamentoDAO.BuscarPorId(id);
+            modelo.EquipamentosDisponiveis.Add(equipamento);
+            modelo.EquipamentosEscolhidos.Remove(equipamento);
+
+            return View("Create", modelo);
         }
 
         public IActionResult Edit(int? id)

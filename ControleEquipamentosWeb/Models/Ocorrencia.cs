@@ -13,6 +13,6 @@ namespace ControleEquipamentosWeb.Models
         public Equipamento Equipamento { get; set; }
         public int OrdemDeServico { get; set; }
         public DateTime PrevisaoRetorno { get; set; }
-        public DateTime DataDevolucao { get; set; }
+        public DateTime? DataDevolucao { get; set; }
     }
 }
