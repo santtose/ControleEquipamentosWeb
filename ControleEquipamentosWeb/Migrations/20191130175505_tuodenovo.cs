@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ControleEquipamentosWeb.Migrations
 {
-    public partial class segundaBase : Migration
+    public partial class tuodenovo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -90,6 +90,27 @@ namespace ControleEquipamentosWeb.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ItemEmprestimos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EmprestimoId = table.Column<int>(nullable: true),
+                    Quantidade = table.Column<int>(nullable: false),
+                    CestaId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemEmprestimos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ItemEmprestimos_Emprestimos_EmprestimoId",
+                        column: x => x.EmprestimoId,
+                        principalTable: "Emprestimos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ocorrencias",
                 columns: table => new
                 {
@@ -134,6 +155,11 @@ namespace ControleEquipamentosWeb.Migrations
                 column: "OperadorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ItemEmprestimos_EmprestimoId",
+                table: "ItemEmprestimos",
+                column: "EmprestimoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ocorrencias_EquipamentoId",
                 table: "Ocorrencias",
                 column: "EquipamentoId");
@@ -141,6 +167,9 @@ namespace ControleEquipamentosWeb.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ItemEmprestimos");
+
             migrationBuilder.DropTable(
                 name: "Ocorrencias");
 

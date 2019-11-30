@@ -14,5 +14,6 @@ namespace ControleEquipamentosWeb.Models
         public DbSet<Emprestimo> Emprestimos { get; set; }
         public DbSet<Equipamento> Equipamentos { get; set; }
         public DbSet<Ocorrencia> Ocorrencias { get; set; }
+        public DbSet<ItemEmprestimo> ItemEmprestimos { get; set; }
     }
 }

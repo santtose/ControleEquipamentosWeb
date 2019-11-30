@@ -17,7 +17,7 @@
                     <input class="form-check-input" asp-for="StatusEmprestimo" /> @Html.DisplayNameFor(model => model.StatusEmprestimo)
                 </label>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="DataDevolucao" class="control-label"></label>
                 <input asp-for="DataDevolucao" class="form-control" />
                 <span asp-validation-for="DataDevolucao" class="text-danger"></span>
@@ -31,6 +31,12 @@
                 <label asp-for="DataPrevistaDevolucao" class="control-label"></label>
                 <input asp-for="DataPrevistaDevolucao" class="form-control" />
                 <span asp-validation-for="DataPrevistaDevolucao" class="text-danger"></span>
+            </div>*@
+            <div id="Equipamento" class="form-group">
+                <label>Equipamento:</label>
+                <select asp-items="@ViewBag.Equipamentos" class="form-control" name="drpEquipamentos">
+                    <option> -- SELECIONE -- </option>
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

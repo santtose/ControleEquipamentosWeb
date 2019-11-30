@@ -17,18 +17,9 @@ namespace ControleEquipamentosWeb.DAL
 
         public bool Cadastrar(Equipamento eq)
         {
-            if (BuscarPorNome(eq) == null)
-            {
-                _context.Equipamentos.Add(eq);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
-        public Equipamento BuscarPorNome(Equipamento eq)
-        {
-            return _context.Equipamentos.FirstOrDefault(x => x.Descricao.Equals(eq.Descricao));
+            _context.Equipamentos.Add(eq);
+            _context.SaveChanges();
+            return true;
         }
 
         public Equipamento BuscarPorId(int? id)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ControleEquipamentosWeb.DAL;
 using ControleEquipamentosWeb.Models;
+using ControleEquipamentosWeb.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +40,9 @@ namespace ControleEquipamentosWeb
             services.AddScoped<EquipamentoDAO>();
             services.AddScoped<OcorrenciaDAO>();
             services.AddScoped<EmprestimoDAO>();
+            services.AddScoped<ItemEmprestimoDAO>();
+            services.AddScoped<UtilsSession>();
+            services.AddHttpContextAccessor();
 
             services.AddDbContext<Context>(options => options.UseSqlServer
             (Configuration.GetConnectionString("ControleEquipamentosConnection")));

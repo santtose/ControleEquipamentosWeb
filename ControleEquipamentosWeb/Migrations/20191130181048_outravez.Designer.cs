@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleEquipamentosWeb.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20191123024454_segundaBase")]
-    partial class segundaBase
+    [Migration("20191130181048_outravez")]
+    partial class outravez
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,8 @@ namespace ControleEquipamentosWeb.Migrations
 
                     b.Property<DateTime>("DataPrevistaDevolucao");
 
+                    b.Property<int?>("EquipamentoId");
+
                     b.Property<int?>("OperadorId");
 
                     b.Property<bool>("StatusEmprestimo");
@@ -40,6 +42,8 @@ namespace ControleEquipamentosWeb.Migrations
                     b.Property<int?>("UsuarioId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EquipamentoId");
 
                     b.HasIndex("OperadorId");
 
@@ -79,6 +83,25 @@ namespace ControleEquipamentosWeb.Migrations
                     b.HasIndex("OperadorId");
 
                     b.ToTable("Equipamentos");
+                });
+
+            modelBuilder.Entity("ControleEquipamentosWeb.Models.ItemEmprestimo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CestaId");
+
+                    b.Property<int?>("EmprestimoId");
+
+                    b.Property<int>("Quantidade");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmprestimoId");
+
+                    b.ToTable("ItemEmprestimos");
                 });
 
             modelBuilder.Entity("ControleEquipamentosWeb.Models.Ocorrencia", b =>
@@ -132,6 +155,10 @@ namespace ControleEquipamentosWeb.Migrations
 
             modelBuilder.Entity("ControleEquipamentosWeb.Models.Emprestimo", b =>
                 {
+                    b.HasOne("ControleEquipamentosWeb.Models.Equipamento", "Equipamento")
+                        .WithMany()
+                        .HasForeignKey("EquipamentoId");
+
                     b.HasOne("ControleEquipamentosWeb.Models.Pessoa", "Operador")
                         .WithMany()
                         .HasForeignKey("OperadorId");
@@ -150,6 +177,13 @@ namespace ControleEquipamentosWeb.Migrations
                     b.HasOne("ControleEquipamentosWeb.Models.Pessoa", "Operador")
                         .WithMany()
                         .HasForeignKey("OperadorId");
+                });
+
+            modelBuilder.Entity("ControleEquipamentosWeb.Models.ItemEmprestimo", b =>
+                {
+                    b.HasOne("ControleEquipamentosWeb.Models.Emprestimo", "Emprestimo")
+                        .WithMany()
+                        .HasForeignKey("EmprestimoId");
                 });
 
             modelBuilder.Entity("ControleEquipamentosWeb.Models.Ocorrencia", b =>

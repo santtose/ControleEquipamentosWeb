@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControleEquipamentosWeb.Models;
 using ControleEquipamentosWeb.DAL;
+using ControleEquipamentosWeb.Utils;
 
 namespace ControleEquipamentosWeb.Controllers
 {
@@ -14,13 +15,19 @@ namespace ControleEquipamentosWeb.Controllers
     {
         private readonly EmprestimoDAO _emprestimoDAO;
         private readonly PessoaDAO _pessoaDAO;
+        private readonly EquipamentoDAO _equipamentoDAO;
+        private readonly ItemEmprestimoDAO _itemEmprestimoDAO;
+        private readonly UtilsSession _utilsSession;
 
         private List<Equipamento> list = new List<Equipamento>();
 
-        public EmprestimosController(EmprestimoDAO emprestimoDAO, PessoaDAO pessoaDAO)
+        public EmprestimosController(EmprestimoDAO emprestimoDAO, PessoaDAO pessoaDAO, EquipamentoDAO equipamentoDAO, UtilsSession utilsSession, ItemEmprestimoDAO itemEmprestimoDAO)
         {
             _emprestimoDAO = emprestimoDAO;
             _pessoaDAO = pessoaDAO;
+            _equipamentoDAO = equipamentoDAO;
+            _utilsSession = utilsSession;
+            _itemEmprestimoDAO = itemEmprestimoDAO;
         }
 
         public IActionResult Index()
@@ -36,13 +43,18 @@ namespace ControleEquipamentosWeb.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "Descricao");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Emprestimo emp)
+        public IActionResult Create(Emprestimo emp, int drpEquipamentos)
         {
+
+            ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "Descricao");
+            emp.Equipamento = _equipamentoDAO.BuscarPorId(drpEquipamentos);
+
             if (ModelState.IsValid)
             {
                 if (_emprestimoDAO.Cadastrar(emp))
@@ -90,5 +102,25 @@ namespace ControleEquipamentosWeb.Controllers
             _emprestimoDAO.Remover(id);
             return RedirectToAction("Index");
         }
+
+        public IActionResult AdicionarNaCesta(int id)
+        {
+            Emprestimo p = _emprestimoDAO.BuscarPorId(id);
+
+            ItemEmprestimo i = new ItemEmprestimo
+            {
+                Emprestimo = p,
+                Quantidade = 1,
+                CestaId = _utilsSession.RetornarCestaId()
+            };
+            _itemEmprestimoDAO.Cadastrar(i);
+            return RedirectToAction("CestaEquipamentos");
+        }
+
+        public IActionResult CestaEquipamentos()
+        {
+            return View(_itemEmprestimoDAO.ListarItensPorCestaId(_utilsSession.RetornarCestaId()));
+        }
+
     }
 }

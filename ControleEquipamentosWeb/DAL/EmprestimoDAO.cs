@@ -18,18 +18,9 @@ namespace ControleEquipamentosWeb.DAL
 
         public bool Cadastrar(Emprestimo emp)
         {
-            if (BuscarPorNome(emp) == null)
-            {
                 _context.Emprestimos.Add(emp);
                 _context.SaveChanges();
                 return true;
-            }
-            return false;
-        }
-
-        public Emprestimo BuscarPorNome(Emprestimo emp)
-        {
-            return _context.Emprestimos.FirstOrDefault(x => x.Id.Equals(emp.Id));
         }
 
         public Emprestimo BuscarPorId(int? id)

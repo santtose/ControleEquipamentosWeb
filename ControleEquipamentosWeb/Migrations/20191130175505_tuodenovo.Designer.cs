@@ -4,14 +4,16 @@ using ControleEquipamentosWeb.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ControleEquipamentosWeb.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20191130175505_tuodenovo")]
+    partial class tuodenovo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,8 +33,6 @@ namespace ControleEquipamentosWeb.Migrations
 
                     b.Property<DateTime>("DataPrevistaDevolucao");
 
-                    b.Property<int?>("EquipamentoId");
-
                     b.Property<int?>("OperadorId");
 
                     b.Property<bool>("StatusEmprestimo");
@@ -40,8 +40,6 @@ namespace ControleEquipamentosWeb.Migrations
                     b.Property<int?>("UsuarioId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EquipamentoId");
 
                     b.HasIndex("OperadorId");
 
@@ -153,10 +151,6 @@ namespace ControleEquipamentosWeb.Migrations
 
             modelBuilder.Entity("ControleEquipamentosWeb.Models.Emprestimo", b =>
                 {
-                    b.HasOne("ControleEquipamentosWeb.Models.Equipamento", "Equipamento")
-                        .WithMany()
-                        .HasForeignKey("EquipamentoId");
-
                     b.HasOne("ControleEquipamentosWeb.Models.Pessoa", "Operador")
                         .WithMany()
                         .HasForeignKey("OperadorId");
