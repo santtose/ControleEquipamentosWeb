@@ -25,7 +25,7 @@ namespace ControleEquipamentosWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DataDevolucao");
+                    b.Property<DateTime?>("DataDevolucao");
 
                     b.Property<DateTime>("DataEmprestimo");
 
@@ -58,8 +58,6 @@ namespace ControleEquipamentosWeb.Migrations
 
                     b.Property<string>("Descricao");
 
-                    b.Property<int?>("EmprestimoId");
-
                     b.Property<bool>("Inativo");
 
                     b.Property<string>("Marca");
@@ -72,11 +70,32 @@ namespace ControleEquipamentosWeb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmprestimoId");
-
                     b.HasIndex("OperadorId");
 
                     b.ToTable("Equipamentos");
+                });
+
+            modelBuilder.Entity("ControleEquipamentosWeb.Models.ItemEmprestimo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Descricao");
+
+                    b.Property<int?>("EmprestimoId");
+
+                    b.Property<int>("EquipamentoId");
+
+                    b.Property<string>("Marca");
+
+                    b.Property<string>("Modelo");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmprestimoId");
+
+                    b.ToTable("ItemEmprestimo");
                 });
 
             modelBuilder.Entity("ControleEquipamentosWeb.Models.Ocorrencia", b =>
@@ -85,7 +104,7 @@ namespace ControleEquipamentosWeb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DataDevolucao");
+                    b.Property<DateTime?>("DataDevolucao");
 
                     b.Property<DateTime>("DataOcorrencia");
 
@@ -141,13 +160,16 @@ namespace ControleEquipamentosWeb.Migrations
 
             modelBuilder.Entity("ControleEquipamentosWeb.Models.Equipamento", b =>
                 {
-                    b.HasOne("ControleEquipamentosWeb.Models.Emprestimo")
-                        .WithMany("Equipamentos")
-                        .HasForeignKey("EmprestimoId");
-
                     b.HasOne("ControleEquipamentosWeb.Models.Pessoa", "Operador")
                         .WithMany()
                         .HasForeignKey("OperadorId");
+                });
+
+            modelBuilder.Entity("ControleEquipamentosWeb.Models.ItemEmprestimo", b =>
+                {
+                    b.HasOne("ControleEquipamentosWeb.Models.Emprestimo")
+                        .WithMany("Equipamentos")
+                        .HasForeignKey("EmprestimoId");
                 });
 
             modelBuilder.Entity("ControleEquipamentosWeb.Models.Ocorrencia", b =>

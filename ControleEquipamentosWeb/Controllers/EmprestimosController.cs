@@ -40,48 +40,59 @@ namespace ControleEquipamentosWeb.Controllers
             return View(obj);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             EmprestimoViewModel modelo = new EmprestimoViewModel();
-            //TODO: Listar Apenas os equipamentos disponiveis
-            modelo.EquipamentosDisponiveis = _equipamentoDAO.ListarTodos();
-            modelo.EquipamentosEscolhidos = new List<Equipamento>();
+            modelo.DataEmprestimo = DateTime.Now;
+            modelo.EquipamentosEscolhidos = new List<ItemEmprestimoViewModel>();
+            var equipamentos = _equipamentoDAO.ListarTodos();
+            foreach (var item in equipamentos)
+            {
+                ItemEmprestimoViewModel itemEmprestimo = new ItemEmprestimoViewModel
+                {
+                    Descricao = item.Descricao,
+                    EquipamentoId = item.Id,
+                    Marca = item.Marca,
+                    Modelo = item.Modelo,
+                    Selecionado = false
+                };
+                modelo.EquipamentosEscolhidos.Add(itemEmprestimo);
+            }
             return View(modelo);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Emprestimo emp)
+        public IActionResult Create(EmprestimoViewModel modelo)
         {
             if (ModelState.IsValid)
             {
-                if (_emprestimoDAO.Cadastrar(emp))
+                Emprestimo emp = new Emprestimo();
+                emp.Equipamentos = new List<ItemEmprestimo>();
+                emp.DataEmprestimo = modelo.DataEmprestimo;
+                emp.DataPrevistaDevolucao = modelo.DataPrevistaDevolucao;
+                foreach (var item in modelo.EquipamentosEscolhidos)
                 {
-                    return RedirectToAction("Index");
+                    if (item.Selecionado)
+                    {
+                        ItemEmprestimo ie = new ItemEmprestimo
+                        {
+                            Descricao = item.Descricao,
+                            EquipamentoId = item.EquipamentoId,
+                            Marca = item.Marca,
+                            Modelo = item.Modelo
+                        };
+                        emp.Equipamentos.Add(ie);
+                    }
                 }
-                ModelState.AddModelError
-                    ("", "Emprestimo já existe!");
-                return View(emp);
+                if (_emprestimoDAO.Cadastrar(emp))
+                    return RedirectToAction(nameof(Index));
+
+                ModelState.AddModelError("", "Não foi possível salvar o empréstimo!");
+                return View(modelo);
             }
-            return View(emp);
-        }
-
-        public IActionResult AdicionarEquipamento(EmprestimoViewModel modelo, int id)
-        {
-            Equipamento equipamento = _equipamentoDAO.BuscarPorId(id);
-            modelo.EquipamentosDisponiveis.Remove(equipamento);
-            modelo.EquipamentosEscolhidos.Add(equipamento);
-
-            return View("Create", modelo);
-        }
-
-        public IActionResult RemoverEquipamento(EmprestimoViewModel modelo, int id)
-        {
-            Equipamento equipamento = _equipamentoDAO.BuscarPorId(id);
-            modelo.EquipamentosDisponiveis.Add(equipamento);
-            modelo.EquipamentosEscolhidos.Remove(equipamento);
-
-            return View("Create", modelo);
+            return View(modelo);
         }
 
         public IActionResult Edit(int? id)

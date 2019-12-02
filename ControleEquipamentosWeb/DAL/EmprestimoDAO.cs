@@ -61,11 +61,11 @@ namespace ControleEquipamentosWeb.DAL
             if (dataPrevistaDevolucaoFim != null)
                 lista = lista.Where(c => c.DataPrevistaDevolucao <= dataPrevistaDevolucaoFim).ToList();
 
-            if (idEquipamento != null)
-            {
-                Equipamento equipamento = _context.Equipamentos.Find(idEquipamento);
-                lista = lista.FindAll(c => c.Equipamentos.Contains(equipamento)).ToList();
-            }
+            //if (idEquipamento != null)
+            //{
+            //    Equipamento equipamento = _context.Equipamentos.Find(idEquipamento);
+            //    lista = lista.FindAll(c => c.Equipamentos.Contains(equipamento)).ToList();
+            //}
 
             if (idUsuario != null)
             {

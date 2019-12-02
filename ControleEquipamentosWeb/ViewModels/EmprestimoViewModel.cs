@@ -15,7 +15,6 @@ namespace ControleEquipamentosWeb.ViewModels
         public DateTime DataPrevistaDevolucao { get; set; }
         public Pessoa Operador { get; set; }
         public Pessoa Usuario { get; set; }
-        public List<Equipamento> EquipamentosDisponiveis { get; set; } = new List<Equipamento>();
-        public List<Equipamento> EquipamentosEscolhidos { get; set; } = new List<Equipamento>();
+        public List<ItemEmprestimoViewModel> EquipamentosEscolhidos { get; set; }
     }
 }

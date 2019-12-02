@@ -8,31 +8,29 @@
 
 <h4>Emprestimo</h4>
 <hr />
+@using (Html.BeginForm("Create", "Emprestimos", FormMethod.Post)) 
+{
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="DataEmprestimo" class="control-label"></label>
-                <input asp-for="DataEmprestimo" class="form-control" />
-                <span asp-validation-for="DataEmprestimo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataPrevistaDevolucao" class="control-label"></label>
-                <input asp-for="DataPrevistaDevolucao" class="form-control" />
-                <span asp-validation-for="DataPrevistaDevolucao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="DataEmprestimo" class="control-label"></label>
+            <input asp-for="DataEmprestimo" class="form-control" />
+            <span asp-validation-for="DataEmprestimo" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DataPrevistaDevolucao" class="control-label"></label>
+            <input asp-for="DataPrevistaDevolucao" class="form-control" />
+            <span asp-validation-for="DataPrevistaDevolucao" class="text-danger"></span>
+        </div>
+
     </div>
     <div class="col-md-8">
-        <div class="container">
+        @*<div class="container">
             <table class="table table-striped" height="50%">
                 <thead class="table-primary">
                     <tr>
-                        <th></th>
+                        <th>Escolher</th>
                         <th>
                             Descricao
                         </th>
@@ -41,61 +39,6 @@
                         </th>
                         <th>
                             Modelo
-                        </th>
-                        <th>
-                            #Registro
-                        </th>
-                        <th>
-                            Criado Em
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.EquipamentosDisponiveis)
-                    {
-                        <tr>
-                            <td>
-                                <a class="btn btn-primary" asp-action="AdicionarEquipamento" asp-controller="Emprestimos" asp-route-id="@item.Id">Incluir</a>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Descricao)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Marca)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Modelo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.NumeroRegistro)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CriadoEm)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="container">
-            <table class="table table-striped" height="50%">
-                <thead class="table-primary">
-                    <tr>
-                        <th></th>
-                        <th>
-                            Descricao
-                        </th>
-                        <th>
-                            Marca
-                        </th>
-                        <th>
-                            Modelo
-                        </th>
-                        <th>
-                            #Registro
-                        </th>
-                        <th>
-                            Criado Em
                         </th>
                     </tr>
                 </thead>
@@ -104,7 +47,8 @@
                     {
                         <tr>
                             <td>
-                                <a class="btn btn-primary" asp-action="RemoverEquipamento" asp-controller="Emprestimos" asp-route-id="@item.Id">Excluir</a>
+                                @Html.HiddenFor(modelItem => item.EquipamentoId)
+                                @Html.CheckBoxFor(modelItem => item.Selecionado, new { @checked = "checked" })
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Descricao)
@@ -115,19 +59,56 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Modelo)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.NumeroRegistro)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CriadoEm)
-                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
+        </div>*@
+
+        <div class="container">
+            <table class="table table-striped" height="50%">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Escolher</th>
+                        <th>
+                            Descricao
+                        </th>
+                        <th>
+                            Marca
+                        </th>
+                        <th>
+                            Modelo
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.EquipamentosEscolhidos.Count; i++)
+                    {
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(modelItem => Model.EquipamentosEscolhidos[i].EquipamentoId)
+                            @Html.CheckBoxFor(modelItem => Model.EquipamentosEscolhidos[i].Selecionado, new { @checked = "checked" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.EquipamentosEscolhidos[i].Descricao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.EquipamentosEscolhidos[i].Marca)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.EquipamentosEscolhidos[i].Modelo)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
         </div>
     </div>
 </div>
+}
 
 <div>
     <a asp-action="Index">Back to List</a>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ControleEquipamentosWeb.Migrations
 {
-    public partial class segundaBase : Migration
+    public partial class Terceirabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,7 +33,7 @@ namespace ControleEquipamentosWeb.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     StatusEmprestimo = table.Column<bool>(nullable: false),
-                    DataDevolucao = table.Column<DateTime>(nullable: false),
+                    DataDevolucao = table.Column<DateTime>(nullable: true),
                     DataEmprestimo = table.Column<DateTime>(nullable: false),
                     DataPrevistaDevolucao = table.Column<DateTime>(nullable: false),
                     OperadorId = table.Column<int>(nullable: true),
@@ -69,22 +69,38 @@ namespace ControleEquipamentosWeb.Migrations
                     OperadorId = table.Column<int>(nullable: true),
                     Contador = table.Column<int>(nullable: false),
                     Inativo = table.Column<bool>(nullable: false),
-                    CriadoEm = table.Column<DateTime>(nullable: false),
-                    EmprestimoId = table.Column<int>(nullable: true)
+                    CriadoEm = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Equipamentos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Equipamentos_Emprestimos_EmprestimoId",
-                        column: x => x.EmprestimoId,
-                        principalTable: "Emprestimos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Equipamentos_Pessoas_OperadorId",
                         column: x => x.OperadorId,
                         principalTable: "Pessoas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ItemEmprestimo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EquipamentoId = table.Column<int>(nullable: false),
+                    Descricao = table.Column<string>(nullable: true),
+                    Marca = table.Column<string>(nullable: true),
+                    Modelo = table.Column<string>(nullable: true),
+                    EmprestimoId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemEmprestimo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ItemEmprestimo_Emprestimos_EmprestimoId",
+                        column: x => x.EmprestimoId,
+                        principalTable: "Emprestimos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -100,7 +116,7 @@ namespace ControleEquipamentosWeb.Migrations
                     EquipamentoId = table.Column<int>(nullable: true),
                     OrdemDeServico = table.Column<int>(nullable: false),
                     PrevisaoRetorno = table.Column<DateTime>(nullable: false),
-                    DataDevolucao = table.Column<DateTime>(nullable: false)
+                    DataDevolucao = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,14 +140,14 @@ namespace ControleEquipamentosWeb.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Equipamentos_EmprestimoId",
-                table: "Equipamentos",
-                column: "EmprestimoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Equipamentos_OperadorId",
                 table: "Equipamentos",
                 column: "OperadorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ItemEmprestimo_EmprestimoId",
+                table: "ItemEmprestimo",
+                column: "EmprestimoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ocorrencias_EquipamentoId",
@@ -142,13 +158,16 @@ namespace ControleEquipamentosWeb.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ItemEmprestimo");
+
+            migrationBuilder.DropTable(
                 name: "Ocorrencias");
 
             migrationBuilder.DropTable(
-                name: "Equipamentos");
+                name: "Emprestimos");
 
             migrationBuilder.DropTable(
-                name: "Emprestimos");
+                name: "Equipamentos");
 
             migrationBuilder.DropTable(
                 name: "Pessoas");

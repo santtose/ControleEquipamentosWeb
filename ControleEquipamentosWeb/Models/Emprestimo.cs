@@ -14,6 +14,6 @@ namespace ControleEquipamentosWeb.Models
         public DateTime DataPrevistaDevolucao { get; set; }
         public Pessoa Operador { get; set; }
         public Pessoa Usuario { get; set; }
-        public List<Equipamento> Equipamentos { get; set; } = new List<Equipamento>();
+        public List<ItemEmprestimo> Equipamentos { get; set; }
     }
 }
