@@ -31,29 +31,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataOcorrencia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrdemDeServico)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrevisaoRetorno)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataDevolucao)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataOcorrencia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrdemDeServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrevisaoRetorno)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataDevolucao)
+                </td>
+                <td>
+                    @if (!@item.Devolvido)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> <span>|</span>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

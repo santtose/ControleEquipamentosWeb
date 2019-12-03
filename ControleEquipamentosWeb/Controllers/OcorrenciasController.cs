@@ -67,6 +67,12 @@ namespace ControleEquipamentosWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Ocorrencia o)
         {
+            var eq = _equipamentoDAO.BuscarPorId(o.Equipamento.Id);
+            o.Equipamento = eq;
+            if(o.DataDevolucao != null)
+            {
+                o.Devolvido = true;
+            }
             _ocorrenciaDAO.Alterar(o);
             return RedirectToAction("Index");
         }
@@ -89,8 +95,16 @@ namespace ControleEquipamentosWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            _ocorrenciaDAO.Remover(id);
-            return RedirectToAction("Index");
+            try
+            {
+                _ocorrenciaDAO.Remover(id);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

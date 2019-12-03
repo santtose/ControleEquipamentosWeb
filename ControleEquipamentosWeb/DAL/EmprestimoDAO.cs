@@ -90,6 +90,7 @@ namespace ControleEquipamentosWeb.DAL
         public void Remover(int? id)
         {
             _context.Emprestimos.Remove(BuscarPorId(id));
+            _context.SaveChanges();
         }
 
         public void Alterar(Emprestimo emp)

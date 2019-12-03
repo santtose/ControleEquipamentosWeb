@@ -6,13 +6,14 @@
 
 <h1>Editar</h1>
 
-<h4>Ocorrencia</h4>
+<h4>Ocorrência</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Devolvido" />
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>
                 <input asp-for="Descricao" class="form-control" />
@@ -38,9 +39,34 @@
                 <input asp-for="DataDevolucao" class="form-control" />
                 <span asp-validation-for="DataDevolucao" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-primary" />
+            <div>
+                <table class="table table-striped" height="50%">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Marca</th>
+                            <th># Registro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.Equipamento.Descricao @Html.HiddenFor(Model => Model.Equipamento.Id)</td>
+                            <td>@Model.Equipamento.Marca</td>
+                            <td>@Model.Equipamento.NumeroRegistro</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+            @if (!Model.Devolvido)
+            {
+                <div class="form-group">
+                    <input type="submit" value="Salvar" class="btn btn-primary" />
+                </div>
+            }
+            else
+            {
+                <p>Ocorrência concluída</p>
+            }
         </form>
     </div>
 </div>

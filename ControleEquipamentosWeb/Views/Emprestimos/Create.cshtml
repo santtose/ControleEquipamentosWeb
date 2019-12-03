@@ -23,48 +23,15 @@
             <input asp-for="DataPrevistaDevolucao" class="form-control" />
             <span asp-validation-for="DataPrevistaDevolucao" class="text-danger"></span>
         </div>
+        <div id="Equipamento" class="form-group">
+            <label>Usuario</label>
+            <select asp-items="@ViewBag.Usuarios" class="form-control" name="drpUsuarios">
+                <option> -- SELECIONE -- </option>
+            </select>
+        </div>
 
     </div>
     <div class="col-md-8">
-        @*<div class="container">
-            <table class="table table-striped" height="50%">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Escolher</th>
-                        <th>
-                            Descricao
-                        </th>
-                        <th>
-                            Marca
-                        </th>
-                        <th>
-                            Modelo
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.EquipamentosEscolhidos)
-                    {
-                        <tr>
-                            <td>
-                                @Html.HiddenFor(modelItem => item.EquipamentoId)
-                                @Html.CheckBoxFor(modelItem => item.Selecionado, new { @checked = "checked" })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Descricao)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Marca)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Modelo)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>*@
-
         <div class="container">
             <table class="table table-striped" height="50%">
                 <thead class="table-primary">
@@ -104,14 +71,14 @@
             </table>
         </div>
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <input type="submit" value="Salvar" class="btn btn-primary" />
         </div>
     </div>
 </div>
 }
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-default">Voltar à lista</a>
 </div>
 
 @section Scripts {

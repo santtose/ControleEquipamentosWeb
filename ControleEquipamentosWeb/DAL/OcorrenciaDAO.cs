@@ -25,7 +25,7 @@ namespace ControleEquipamentosWeb.DAL
 
         public Ocorrencia BuscarPorId(int? id)
         {
-            return _context.Ocorrencias.FirstOrDefault(x => x.Id == id);
+            return _context.Ocorrencias.Include(nameof(Equipamento)).FirstOrDefault(x => x.Id == id);
         }
 
         public List<Ocorrencia> ListarTodos()
@@ -36,6 +36,7 @@ namespace ControleEquipamentosWeb.DAL
         public void Remover(int? id)
         {
             _context.Ocorrencias.Remove(BuscarPorId(id));
+            _context.SaveChanges();
         }
 
         public void Alterar(Ocorrencia o)

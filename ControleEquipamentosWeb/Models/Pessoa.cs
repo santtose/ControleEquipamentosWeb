@@ -18,6 +18,11 @@ namespace ControleEquipamentosWeb.Models
         public string Usuario { get; set; }
         public string CPF { get; set; }
         public bool Admin { get; set; }
+
+        [Required(ErrorMessage = "{0} required")]
+        [Display(Name = "Criado Em:")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CriadoEm { get; set; } = DateTime.Now;
     }
 }

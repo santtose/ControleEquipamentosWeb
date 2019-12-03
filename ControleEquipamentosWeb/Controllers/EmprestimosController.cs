@@ -47,6 +47,7 @@ namespace ControleEquipamentosWeb.Controllers
             modelo.DataEmprestimo = DateTime.Now;
             modelo.EquipamentosEscolhidos = new List<ItemEmprestimoViewModel>();
             var equipamentos = _equipamentoDAO.ListarTodos();
+            PreencherCombos();
             foreach (var item in equipamentos)
             {
                 ItemEmprestimoViewModel itemEmprestimo = new ItemEmprestimoViewModel
@@ -64,7 +65,7 @@ namespace ControleEquipamentosWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmprestimoViewModel modelo)
+        public IActionResult Create(EmprestimoViewModel modelo, int drpUsuarios)
         {
             if (ModelState.IsValid)
             {
@@ -72,27 +73,35 @@ namespace ControleEquipamentosWeb.Controllers
                 emp.Equipamentos = new List<ItemEmprestimo>();
                 emp.DataEmprestimo = modelo.DataEmprestimo;
                 emp.DataPrevistaDevolucao = modelo.DataPrevistaDevolucao;
+                emp.Operador = _pessoaDAO.BuscarPorId(drpUsuarios);
                 foreach (var item in modelo.EquipamentosEscolhidos)
                 {
                     if (item.Selecionado)
                     {
+                        Equipamento eq = _equipamentoDAO.BuscarPorId(item.EquipamentoId);
                         ItemEmprestimo ie = new ItemEmprestimo
                         {
-                            Descricao = item.Descricao,
-                            EquipamentoId = item.EquipamentoId,
-                            Marca = item.Marca,
-                            Modelo = item.Modelo
+                            Descricao = eq.Descricao,
+                            EquipamentoId = eq.Id,
+                            Marca = eq.Marca,
+                            Modelo = eq.Modelo
                         };
                         emp.Equipamentos.Add(ie);
                     }
                 }
                 if (_emprestimoDAO.Cadastrar(emp))
                     return RedirectToAction(nameof(Index));
-
+                PreencherCombos();
                 ModelState.AddModelError("", "Não foi possível salvar o empréstimo!");
                 return View(modelo);
             }
+            PreencherCombos();
             return View(modelo);
+        }
+
+        private void PreencherCombos()
+        {
+            ViewBag.Usuarios = new SelectList(_pessoaDAO.ListarTodos(), "Id", "Nome");
         }
 
         public IActionResult Edit(int? id)
