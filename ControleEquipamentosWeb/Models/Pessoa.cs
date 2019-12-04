@@ -14,6 +14,11 @@ namespace ControleEquipamentosWeb.Models
         [MaxLength(200, ErrorMessage ="Máximo de 200 caracteres atingidos.")]
         [MinLength(3, ErrorMessage = "Mínimo de 3 caracteres.")]
         public string Nome { get; set; }
+        [Display(Name = "E-Mail")]
+        [EmailAddress(ErrorMessage = "Necessita de Email")]
+        public string Email { get; set; }
+        [Display(Name = "Senha")]
+        public string Senha { get; set; }
         public DateTime Aniversario { get; set; }
         public string Usuario { get; set; }
         public string CPF { get; set; }

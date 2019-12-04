@@ -1,4 +1,5 @@
 ﻿using ControleEquipamentosWeb.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,20 @@ namespace ControleEquipamentosWeb.DAL
         public List<Equipamento> ListarTodos()
         {
             return _context.Equipamentos.ToList();
+        }
+
+        public List<Equipamento> ListarDisponiveis()
+        {
+            var equipamentos = _context.Equipamentos.Where(x => !x.Inativo).ToList();
+
+            return equipamentos;
+        }
+
+        public List<ItemEmprestimo> ListarItensDeEmprestimo(int id)
+        {
+            var lista = _context.ItemEmprestimos.Where(x => x.EmprestimoId == id).ToList();
+
+            return lista;
         }
 
         public void Remover(int? id)

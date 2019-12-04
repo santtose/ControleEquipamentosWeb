@@ -25,7 +25,8 @@ namespace ControleEquipamentosWeb.DAL
 
         public Emprestimo BuscarPorId(int? id)
         {
-            return _context.Emprestimos.FirstOrDefault(x => x.Id == id);
+            var emprestimo = _context.Emprestimos.Include(x => x.Equipamentos).FirstOrDefault(x => x.Id == id);
+            return emprestimo;
         }
 
         public List<Emprestimo> ListarTodos()

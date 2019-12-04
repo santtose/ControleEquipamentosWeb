@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControleEquipamentosWeb.Models;
 using ControleEquipamentosWeb.DAL;
+using Microsoft.AspNetCore.Identity;
 
 namespace ControleEquipamentosWeb.Controllers
 {
     public class PessoasController : Controller
     {
         private readonly PessoaDAO _pessoaDAO;
+        private readonly UserManager<UsuarioLogado> _userManager;
+        private readonly SignInManager<UsuarioLogado> _signManager;
 
-        public PessoasController(PessoaDAO pessoaDAO)
+        public PessoasController(PessoaDAO pessoaDAO, UserManager<UsuarioLogado> userManager, SignInManager<UsuarioLogado> signManager)
         {
             _pessoaDAO = pessoaDAO;
+            _userManager = userManager;
+            _signManager = signManager;
         }
 
         // GET: Pessoas
@@ -45,19 +50,59 @@ namespace ControleEquipamentosWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Pessoa p)
+        public async Task<IActionResult> Create(Pessoa p)
         {
             if (ModelState.IsValid)
             {
-                if (_pessoaDAO.Cadastrar(p))
+                //Criar um objeto do UsuarioLogado e passar                 
+                //obrigatoriamente o Email e UserName
+                UsuarioLogado usuarioLogado = new UsuarioLogado
                 {
-                    return RedirectToAction("Index");
+                    Email = p.Email,
+                    UserName = p.Email
+                };
+
+                //Cadastra o usuário na tabela do Identity
+                IdentityResult result = await _userManager.CreateAsync(usuarioLogado, p.Senha);
+
+                if (result.Succeeded)
+                {
+                    await _signManager.SignInAsync(usuarioLogado, isPersistent: false);
+
+                    if (_pessoaDAO.Cadastrar(p))
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    ModelState.AddModelError
+                        ("", "Pessoa já existe!");
+                    return View(p);
                 }
-                ModelState.AddModelError
-                    ("", "Pessoa já existe!");
-                return View(p);
             }
             return View(p);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(Pessoa p)
+        {
+            var resultado = await _signManager.PasswordSignInAsync(p.Email, p.Senha, true, lockoutOnFailure: false);
+            if (resultado.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError("", "Falha no login");
+            return View();
         }
 
         // GET: Pessoas/Edit/5

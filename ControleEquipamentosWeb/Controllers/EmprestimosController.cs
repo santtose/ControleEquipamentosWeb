@@ -46,7 +46,7 @@ namespace ControleEquipamentosWeb.Controllers
             EmprestimoViewModel modelo = new EmprestimoViewModel();
             modelo.DataEmprestimo = DateTime.Now;
             modelo.EquipamentosEscolhidos = new List<ItemEmprestimoViewModel>();
-            var equipamentos = _equipamentoDAO.ListarTodos();
+            var equipamentos = _equipamentoDAO.ListarDisponiveis();
             PreencherCombos();
             foreach (var item in equipamentos)
             {
@@ -79,6 +79,8 @@ namespace ControleEquipamentosWeb.Controllers
                     if (item.Selecionado)
                     {
                         Equipamento eq = _equipamentoDAO.BuscarPorId(item.EquipamentoId);
+                        eq.Inativo = true;
+                        _equipamentoDAO.Alterar(eq);
                         ItemEmprestimo ie = new ItemEmprestimo
                         {
                             Descricao = eq.Descricao,
@@ -106,6 +108,7 @@ namespace ControleEquipamentosWeb.Controllers
 
         public IActionResult Edit(int? id)
         {
+            
             return View(_emprestimoDAO.BuscarPorId(id));
         }
 
@@ -113,6 +116,18 @@ namespace ControleEquipamentosWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Emprestimo emp)
         {
+            if(emp.DataDevolucao != null)
+            {
+                emp.Equipamentos = _equipamentoDAO.ListarItensDeEmprestimo(emp.Id);
+                emp.StatusEmprestimo = true;
+                foreach (var item in emp.Equipamentos)
+                {
+                    Equipamento eq = _equipamentoDAO.BuscarPorId(item.EquipamentoId);
+                    eq.Inativo = false;
+                    _equipamentoDAO.Alterar(eq);
+                }
+            }
+
             _emprestimoDAO.Alterar(emp);
             return RedirectToAction("Index");
         }

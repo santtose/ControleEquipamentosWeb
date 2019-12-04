@@ -8,9 +8,10 @@
 
 <h4>Emprestimo</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+@using (Html.BeginForm("Edit", "Emprestimos", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group form-check">
@@ -33,13 +34,52 @@
                 <input asp-for="DataPrevistaDevolucao" class="form-control" />
                 <span asp-validation-for="DataPrevistaDevolucao" class="text-danger"></span>
             </div>
+            @Html.HiddenFor(model => model.Equipamentos)
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
+        <div class="col-md-8">
+            <div class="container">
+                <table class="table table-striped" height="50%">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Escolher</th>
+                            <th>
+                                Descricao
+                            </th>
+                            <th>
+                                Marca
+                            </th>
+                            <th>
+                                Modelo
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Equipamentos.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(modelItem => Model.Equipamentos[i].EquipamentoId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Equipamentos[i].Descricao)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Equipamentos[i].Marca)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Equipamentos[i].Modelo)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
-
+}
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
