@@ -5,14 +5,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ControleEquipamentosWeb.Models;
+using Microsoft.AspNetCore.Identity;
+using ControleEquipamentosWeb.DAL;
 
 namespace ControleEquipamentosWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly EquipamentoDAO _equipamentoDAO;
+        private readonly UserManager<UsuarioLogado> _userManager;
+        private readonly SignInManager<UsuarioLogado> _signManager;
+
+        public HomeController(EquipamentoDAO equipamentoDAO, UserManager<UsuarioLogado> userManager, SignInManager<UsuarioLogado> signManager)
         {
-            return View();
+            _userManager = userManager;
+            _signManager = signManager;
+            _equipamentoDAO = equipamentoDAO;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login","Pessoas");
+            }
+            List<Equipamento> lista = _equipamentoDAO.ListarParaReparo();
+            return View(lista);
         }
 
         public IActionResult Privacy()

@@ -44,6 +44,7 @@ namespace ControleEquipamentosWeb.Controllers
         {
             ViewBag.Equipamentos = new SelectList(_equipamentoDAO.ListarTodos(), "Id", "NumeroRegistro");
             o.Equipamento = _equipamentoDAO.BuscarPorId(drpEquipamentos);
+            o.Equipamento.Contador = 10;
 
             if (ModelState.IsValid)
             {

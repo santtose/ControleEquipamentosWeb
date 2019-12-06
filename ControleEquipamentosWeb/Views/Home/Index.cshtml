@@ -1,8 +1,69 @@
-﻿@{
+﻿@model IEnumerable<ControleEquipamentosWeb.Models.Equipamento>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Bem vindo!</h1>
-    <p>Criar um dashboard</p>
+    <h1 class="display-4"></h1>
+    @if (!Model.Any())
+    {
+        <div class="alert-warning mb-5 mt-5 rounded">
+            <br />
+            <h4>Não há equipamentos marcados para manutenção</h4>
+            <br />
+        </div>
+    }
+    else
+    {
+        <div class="alert-warning mb-5 mt-5 rounded">
+            <br />
+            <h4>Equipamentos marcados para manutenção</h4>
+            <br />
+        </div>
+        <div class="container">
+            <table class="table table-hover table-striped">
+                <thead class="table-info">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descricao)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Marca)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Modelo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NumeroRegistro)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Contador)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descricao)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Marca)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Modelo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumeroRegistro)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Contador)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>

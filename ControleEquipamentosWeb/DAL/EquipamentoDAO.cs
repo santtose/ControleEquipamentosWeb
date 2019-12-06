@@ -35,7 +35,14 @@ namespace ControleEquipamentosWeb.DAL
 
         public List<Equipamento> ListarDisponiveis()
         {
-            var equipamentos = _context.Equipamentos.Where(x => !x.Inativo).ToList();
+            var equipamentos = _context.Equipamentos.Where(x => !x.Inativo && x.Contador > 0).ToList();
+
+            return equipamentos;
+        }
+
+        public List<Equipamento> ListarParaReparo()
+        {
+            var equipamentos = _context.Equipamentos.Where(x => x.Contador <= 0).ToList();
 
             return equipamentos;
         }

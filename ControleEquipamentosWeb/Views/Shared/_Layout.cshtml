@@ -1,7 +1,6 @@
 ﻿@inject Microsoft.AspNetCore.Identity.SignInManager<UsuarioLogado> SignInManager
 @inject Microsoft.AspNetCore.Identity.UserManager<UsuarioLogado> UserManager
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,59 +21,59 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ControleEquipamentosWeb</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pessoas" asp-action="Index">Pessoa</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Equipamentos" asp-action="Index">Equipamento</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Ocorrencias" asp-action="Index">Ocorrência</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Emprestimos" asp-action="Index">Emprestimos</a>
-                        </li>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ControleEquipamentosWeb</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-action="Logout"
-                                   asp-controller="Pessoa">
-                                    <h5>
-                                        Olá, @UserManager.GetUserName(User)
-                                        - Logout
-                                    </h5>
-                                </a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
-                        }
-                        else
-                        {
                             <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-action="Login"
-                                   asp-controller="Pessoa">
-                                    <h5> Login </h5>
-                                </a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Pessoas" asp-action="Index">Pessoa</a>
                             </li>
-                        }
-                    </ul>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Equipamentos" asp-action="Index">Equipamento</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Ocorrencias" asp-action="Index">Ocorrência</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Emprestimos" asp-action="Index">Emprestimos</a>
+                            </li>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       asp-action="Logout"
+                                       asp-controller="Pessoas">
+                                        <p>
+                                            Olá, @UserManager.GetUserName(User)
+                                            - Logout
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       asp-action="Login"
+                                       asp-controller="Pessoas">
+                                        <p> Login </p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">

@@ -82,7 +82,7 @@ namespace ControleEquipamentosWeb
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Pessoas}/{action=Login}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

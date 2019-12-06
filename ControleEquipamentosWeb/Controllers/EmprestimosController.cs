@@ -80,6 +80,7 @@ namespace ControleEquipamentosWeb.Controllers
                     {
                         Equipamento eq = _equipamentoDAO.BuscarPorId(item.EquipamentoId);
                         eq.Inativo = true;
+                        eq.Contador -= 1;
                         _equipamentoDAO.Alterar(eq);
                         ItemEmprestimo ie = new ItemEmprestimo
                         {
